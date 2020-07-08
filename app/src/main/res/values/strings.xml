@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Health Monitor</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Aggiungi un record"</string>
+    <string name="add_record">Hello blank fragment</string>
+
+</resources>
