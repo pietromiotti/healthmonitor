@@ -21,13 +21,21 @@ public class Record {
 
     private double weight;
 
+    private boolean isSummary;
+
+    public void setId(int id){
+        this.id =id;
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id){
-        this.id =id;
+    public void setIsSummary(boolean isSummary){
+        this.isSummary =isSummary;
+    }
+    public boolean getIsSummary(){
+        return this.isSummary;
     }
 
     public Date getDate(){

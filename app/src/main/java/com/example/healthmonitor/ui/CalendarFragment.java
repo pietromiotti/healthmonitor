@@ -38,6 +38,9 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
    private DatabaseManager databaseManager;
    private CalendarView calendarView;
    public static Calendar selectedDate;
+   private String selectedDatestring;
+   private TextView text;
+
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -73,9 +76,10 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         calendarView = view.findViewById(R.id.calendarView);
-        final TextView text = view.findViewById(R.id.textView2);
+        text = view.findViewById(R.id.textView2);
+        final MaterialButton viewMySelected = view.findViewById(R.id.checkRecordSelectedDate);
+        viewMySelected.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.selected_date_records, null));
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -84,15 +88,15 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 int minutes = rightNow.get(Calendar.MINUTE);
                 selectedDate = Calendar.getInstance();
                 selectedDate.set(year,month,dayOfMonth,hour,minutes);
-                String s = "Selected date " + dayOfMonth + "/" + month + "/" + year;
-                text.setText(s);
+                selectedDatestring = "Selected date " + dayOfMonth + "/" + month + "/" + year;
+                text.setText(selectedDatestring);
             }
         });
     }
 
     @Override
     public void onResume() {
-        //btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_records, null));
+
         FloatingActionButton addRecord = getActivity().findViewById(R.id.addRecord);
         addRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +106,11 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 openAddDialog();
             }
         });
+        if(selectedDate != null){
+            calendarView.setDate(selectedDate.getTimeInMillis(),true, true);
+            selectedDatestring = "Selected date " + selectedDate.get(Calendar.DAY_OF_MONTH) + "/" + selectedDate.get(Calendar.MONTH) + "/" + selectedDate.get(Calendar.YEAR);
+            text.setText(selectedDatestring);
+        }
         super.onResume();
     }
 
@@ -124,6 +133,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
     public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
 
     }
+
 
 
 }

@@ -81,6 +81,7 @@ public class DialogRecord extends DialogFragment{
                             Integer maxpressure = Integer.parseInt(maxpressureEditText.getEditText().getText().toString());
 
                             dialogListener.dialogEditRecord(position, minpressure, maxpressure, temperature, weight, null );
+
                         }
                         else {
 
@@ -96,7 +97,7 @@ public class DialogRecord extends DialogFragment{
                             else {
                                 today = CalendarFragment.selectedDate.getTime();
                             }
-                            Record record = databaseManager.initRecord(minpressure,maxpressure,temperature,weight, today);
+                            Record record = databaseManager.initRecord(minpressure,maxpressure,temperature,weight, today, false);
                             dialogListener.dialogAddRecord(record);
                         }
                     }

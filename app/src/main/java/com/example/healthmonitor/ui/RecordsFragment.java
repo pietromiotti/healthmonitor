@@ -27,7 +27,6 @@ import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 public class RecordsFragment extends Fragment {
     private DatabaseManager databaseManager;
 
-
     private RecordAdapter recordAdapter;
 
     public RecordsFragment() {
@@ -52,7 +51,7 @@ public class RecordsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
-        recordAdapter = new RecordAdapter(getActivity(), databaseManager);
+        recordAdapter = new RecordAdapter(getActivity(), databaseManager, databaseManager.recordList);
         View view =  inflater.inflate(R.layout.fragment_records, container, false);
         return view;
 

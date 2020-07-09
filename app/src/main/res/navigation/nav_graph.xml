@@ -12,9 +12,14 @@
         android:label="Health Monitor"
         tools:layout="@layout/fragment_calendar" >
         <action
-            android:id="@+id/action_blankFragment_to_blankFragment2"
-            app:destination="@id/nav_records" />
+            android:id="@+id/action_nav_calendar_to_selected_date_records"
+            app:destination="@id/selected_date_records" />
     </fragment>
+    <fragment
+        android:id="@+id/selected_date_records"
+        android:name="com.example.healthmonitor.ui.RecordSelectedFragment"
+        android:label="Visualizza i record"
+        tools:layout="@layout/fragment_records_selected" />
     <fragment
         android:id="@+id/nav_records"
         android:name="com.example.healthmonitor.ui.RecordsFragment"

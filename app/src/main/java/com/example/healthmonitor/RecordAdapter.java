@@ -28,14 +28,15 @@ import java.util.List;
 *   The RecordAdapter receive the init of the Database as argument
 * */
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordViewHolder>{
-    public static List<Record> recordList;
+    List<Record> recordList;
     Context context;
     DatabaseManager databaseManager;
     DialogRecord dialog = new DialogRecord(databaseManager);
     RecordAdapter recordAdapter;
 
-    public RecordAdapter(Context context, DatabaseManager databaseManager){
+    public RecordAdapter(Context context, DatabaseManager databaseManager, List<Record> list){
         this.context = context;
+        this.recordList = list;
     }
 
     @NonNull
@@ -57,9 +58,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         String temperature = String.valueOf(record.getTemperature());
         holder.textViewTemperature.setText(temperature);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String strDate= formatter.format(record.getDate());
-        holder.textViewDate.setText(strDate);
+        if (record.getIsSummary()){
+            holder.textViewDate.setText("Media Giornaliera");
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+        }
+        else{
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String strDate= formatter.format(record.getDate());
+            holder.textViewDate.setText(strDate);
+        }
     }
 
     @Override
@@ -125,12 +133,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
         }
 
-        //TODO solve bug rotation and Reference Adapter for notifyDAta
          @Override
          public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
             Record oldRecord = recordList.get(position);
-            databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);
-            notifyItemChanged(position);
+            databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);notifyItemChanged(position);
+
             Toast.makeText(context.getApplicationContext(), "EDIT RECORD" + position, Toast.LENGTH_LONG).show();
          }
 

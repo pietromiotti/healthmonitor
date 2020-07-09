@@ -10,14 +10,18 @@ import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.RecordAdapter;
 import com.example.healthmonitor.ui.RecordsFragment;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 
 /* Handler od DataBase Request */
 public class DatabaseManager {
     String DB_NAME = "Mydb";
     public static DatabaseManager MyDatabaseManager;
+    public List<Record> recordList;
     private MyRoomDatabase mydatabase;
     private Context context;
 
@@ -69,7 +73,7 @@ public class DatabaseManager {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            RecordAdapter.recordList = mydatabase.myDao().getRecords();
+            recordList = mydatabase.myDao().getRecords();
             return null;
         }
     }
@@ -78,7 +82,7 @@ public class DatabaseManager {
 
         @Override
         protected Void doInBackground(Context... contexts) {
-            mydatabase = Room.databaseBuilder(contexts[0], MyRoomDatabase.class, DB_NAME).build();
+            mydatabase = Room.databaseBuilder(contexts[0], MyRoomDatabase.class, DB_NAME).fallbackToDestructiveMigration().build();
             return null;
         }
 
@@ -136,7 +140,7 @@ public class DatabaseManager {
         this.context = context;
     }
 
-    public Record initRecord(Integer min_pressure, Integer max_pressure, Double temperature, Double weight, Date date) {
+    public Record initRecord(Integer min_pressure, Integer max_pressure, Double temperature, Double weight, Date date, Boolean isSummary) {
         Record record = new Record();
         record.setMin_pressure(min_pressure);
         record.setMax_pressure(max_pressure);
@@ -145,8 +149,32 @@ public class DatabaseManager {
         if (date != null) {
             record.setDate(date);
         }
+        record.setIsSummary(isSummary);
         return record;
     }
+
+    public List<Record>getRecordsDate(Date selected){
+        List<Record> selectedDateRecords = new ArrayList<>();
+        boolean sameDay;
+        Calendar cal_selected = Calendar.getInstance();
+        Calendar cal_current = Calendar.getInstance();
+        cal_selected.setTime(selected);
+        Record current;
+
+        for (int i =0; i< recordList.size(); i++){
+            current = recordList.get(i);
+            cal_current.setTime(current.getDate());
+            sameDay = cal_selected.get(Calendar.DAY_OF_YEAR) == cal_current.get(Calendar.DAY_OF_YEAR) &&
+                    cal_selected.get(Calendar.YEAR) == cal_current.get(Calendar.YEAR);
+            if(sameDay) {
+                selectedDateRecords.add(current);
+            }
+
+        }
+        return selectedDateRecords;
+    }
+
+
 
     public void Close(){
         if (mydatabase.isOpen()) mydatabase.close();
