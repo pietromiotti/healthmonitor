@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.TextView;
 
 import com.example.healthmonitor.DialogRecord;
 import com.example.healthmonitor.MainActivity;
@@ -21,6 +24,7 @@ import com.example.healthmonitor.RoomDatabase.Record;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +36,8 @@ import java.util.List;
  */
 public class CalendarFragment extends Fragment implements DialogRecord.DialogListener {
    private DatabaseManager databaseManager;
+   private CalendarView calendarView;
+   public static Calendar selectedDate;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -60,8 +66,28 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        calendarView = view.findViewById(R.id.calendarView);
+        final TextView text = view.findViewById(R.id.textView2);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Calendar rightNow = Calendar.getInstance();
+                int hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                int minutes = rightNow.get(Calendar.MINUTE);
+                selectedDate = Calendar.getInstance();
+                selectedDate.set(year,month,dayOfMonth,hour,minutes);
+                String s = "Selected date " + dayOfMonth + "/" + month + "/" + year;
+                text.setText(s);
+            }
+        });
     }
 
     @Override

@@ -8,7 +8,7 @@
     android:layout_margin="8dp"
     app:cardElevation="2dp"
     app:cardCornerRadius="6dp"
-    android:backgroundTint="@color/colorBlueLight"
+    android:backgroundTint="@color/colorBackground"
     style="@style/Widget.MaterialComponents.CardView">
 
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorBlueDark"
             />
 
         <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pressione"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorBlack"
                 />
 
             <LinearLayout
@@ -51,7 +51,7 @@
                     android:text="Minima"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
                 <TextView
                     android:id="@+id/min_pressure_val"
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:text=""
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     android:gravity="center_horizontal"
                     />
                 <TextView
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:text="Massima"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
                 <TextView
                     android:id="@+id/max_pressure_val"
@@ -76,7 +76,7 @@
                     android:text=""
                     android:gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
             </LinearLayout>
             <LinearLayout
@@ -91,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:text="Temperatura"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
                 <TextView
                     android:id="@+id/temperature_val"
@@ -99,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:text=""
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
             </LinearLayout>
             <LinearLayout
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="Peso"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
                 <TextView
                     android:id="@+id/weight_val"
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
                     />
             </LinearLayout>
 
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/colorBlueDark"
+                android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorWhite"
                 android:text="Modifica"
                 style="?attr/borderlessButtonStyle"
@@ -148,7 +148,7 @@
                 android:id="@+id/remove_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorBlueDark"
+                android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorWhite"
                 android:text="Rimuovi"
                 style="?attr/borderlessButtonStyle"

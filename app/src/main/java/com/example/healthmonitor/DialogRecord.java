@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.ui.CalendarFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -89,7 +90,12 @@ public class DialogRecord extends DialogFragment{
                             Integer maxpressure = Integer.parseInt(maxpressureEditText.getEditText().getText().toString());
 
                             Date today = new Date();
-                            today = Calendar.getInstance().getTime();
+                            if (CalendarFragment.selectedDate == null){
+                                today = Calendar.getInstance().getTime();
+                            }
+                            else {
+                                today = CalendarFragment.selectedDate.getTime();
+                            }
                             Record record = databaseManager.initRecord(minpressure,maxpressure,temperature,weight, today);
                             dialogListener.dialogAddRecord(record);
                         }
