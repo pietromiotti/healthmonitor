@@ -63,7 +63,7 @@ public class RecordSelectedFragment  extends Fragment{
         mytempList = databaseManager.getRecordsDate(today);
         mytempList = addSummaryRecord(mytempList);
         recordAdapter = new RecordAdapter(getActivity(), databaseManager, mytempList);
-        View view =  inflater.inflate(R.layout.fragment_records, container, false);
+        View view =  inflater.inflate(R.layout.fragment_records_selected, container, false);
         return view;
     }
         @Override
@@ -76,7 +76,7 @@ public class RecordSelectedFragment  extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         /*Create recordList */
-        RecyclerView recyclerView = getActivity().findViewById(R.id.recordListCards);
+        RecyclerView recyclerView = getActivity().findViewById(R.id.recordListCards_selected);
 
         /*Create New layout Manager */
         int orientation = getResources().getConfiguration().orientation;
