@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,7 @@ import android.view.ViewGroup;
 import com.example.healthmonitor.R;
 import com.example.healthmonitor.RecordAdapter;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
-
+import com.google.android.material.button.MaterialButton;
 
 
 public class RecordsFragment extends Fragment {
@@ -69,7 +70,9 @@ public class RecordsFragment extends Fragment {
 
         /*Create recordList */
         RecyclerView recyclerView = getActivity().findViewById(R.id.recordListCards);
+        MaterialButton filterButton = getActivity().findViewById(R.id.filterButton);
 
+        filterButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_filters, null));
         /*Create New layout Manager */
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {

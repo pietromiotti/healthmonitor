@@ -24,7 +24,20 @@
         android:id="@+id/nav_records"
         android:name="com.example.healthmonitor.ui.RecordsFragment"
         android:label="My Records"
-        tools:layout="@layout/fragment_records" />
+        tools:layout="@layout/fragment_records" >
+        <action
+            android:id="@+id/action_nav_records_to_nav_filters"
+            app:destination="@id/nav_filters" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_filters"
+        android:name="com.example.healthmonitor.ui.FilterFragment"
+        android:label="Applica i filtri"
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/action_nav_filters_to_nav_records"
+            app:destination="@id/nav_records" />
+    </fragment>
     <fragment
         android:id="@+id/nav_chart"
         android:name="com.example.healthmonitor.ui.ChartsFragment"

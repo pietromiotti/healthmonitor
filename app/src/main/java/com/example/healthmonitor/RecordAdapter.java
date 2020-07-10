@@ -64,7 +64,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             holder.deleteButton.setVisibility(View.GONE);
         }
         else{
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy HH:mm:ss");
             String strDate= formatter.format(record.getDate());
             holder.textViewDate.setText(strDate);
         }

@@ -15,6 +15,7 @@ import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
+import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawer;
     Toolbar toolbar;
     public DatabaseManager databaseManager;
+    public PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
         //NavigationUI.setupWithNavController(navView, nav);
         NavigationUI.setupActionBarWithNavController(this, nav, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, nav);
-
-        Log.i("INIT", "before Database init");
+        this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getApplicationContext());
         this.databaseManager = DatabaseManager.getInstanceDb(this);
-        Log.i("DB", this.databaseManager.toString());
-        Log.i("INIT", "after Database init");
+
 
     }
 

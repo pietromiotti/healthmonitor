@@ -8,7 +8,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
+        android:id="@+id/filterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -22,7 +22,7 @@
         android:id="@+id/frame_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton"
+        app:layout_constraintTop_toBottomOf="@+id/filterButton"
         tools:context=".ui.RecordsFragment"
         android:paddingBottom="60dp">
 

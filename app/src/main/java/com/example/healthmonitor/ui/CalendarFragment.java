@@ -21,9 +21,11 @@ import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.MyRoomDatabase;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +42,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
    public static Calendar selectedDate;
    private String selectedDatestring;
    private TextView text;
+   private PreferenceManager preferenceManager;
 
 
     public CalendarFragment() {
@@ -69,6 +72,8 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
+        this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getActivity().getApplicationContext());
+        Log.i("DATE", "CALENDAR -->" + this.preferenceManager.context.toString());
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         return view;
     }
@@ -90,6 +95,11 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 selectedDate.set(year,month,dayOfMonth,hour,minutes);
                 selectedDatestring = "Selected date " + dayOfMonth + "/" + (month+1) + "/" + year;
                 text.setText(selectedDatestring);
+                Date today = new Date();
+                if (CalendarFragment.selectedDate == null){
+                    today = Calendar.getInstance().getTime();
+                }
+                preferenceManager.setDatePreference(selectedDate.getTime(), today);
             }
         });
     }
@@ -110,6 +120,12 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
             calendarView.setDate(selectedDate.getTimeInMillis(),true, true);
             selectedDatestring = "Selected date " + selectedDate.get(Calendar.DAY_OF_MONTH) + "/" + (selectedDate.get(Calendar.MONTH)+1) + "/" + selectedDate.get(Calendar.YEAR);
             text.setText(selectedDatestring);
+            try {
+                Log.i("DATE", "DATE FROM -->" + preferenceManager.getDateFromPreference().toString());
+                Log.i("DATE", "DATE TO -->" + preferenceManager.getDateToPreference().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         super.onResume();
     }
