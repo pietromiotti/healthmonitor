@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.healthmonitor.RoomDatabase.Record;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,8 +32,13 @@ public class PreferenceManager {
     private static final String PRIORITY_WEIGHT = "PRIORITY_WEIGHT";
     private static final String PRIORITY_TEMPERATURE = "PRIORITY_TEMPERATURE";
     private static final String PRIOTIRY_PRESSURE = "PRIORITY_PRESSURE";
-    private static final long LIMIT_MIN_DATE = Long.MIN_VALUE;
-    private static final long LIMIT_MAX_DATE = Long.MAX_VALUE;
+
+    public static final long LIMIT_MIN_DATE = Long.MIN_VALUE;
+    public static final long LIMIT_MAX_DATE = Long.MAX_VALUE;
+    public static final int DEFAULT_MAX_INT = Integer.MAX_VALUE;
+    public static final int DEFAULT_MIN_INT = Integer.MIN_VALUE;
+    public static final double DEFAULT_MAX_DOUBLE = Double.MAX_VALUE;
+    public static final double DEFAULT_MIN_DOUBLE = Double.MIN_VALUE;
 
 
     public PreferenceManager(Context context){
@@ -40,7 +47,6 @@ public class PreferenceManager {
         sharedPreferences = this.context.getSharedPreferences(context.getPackageName()+"."+name, Context.MODE_PRIVATE);
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         editor = this.sharedPreferences.edit();
-
 }
     public static PreferenceManager getPreferenceManagerWithContext(Context context) {
         if (preferenceManager == null){
@@ -55,22 +61,23 @@ public class PreferenceManager {
     }
 
     public void setDatePreference(Date from, Date to){
-        if(from != null){
+        if((from != null) && (to != null)) {
             long date = Converters.dateToTimestamp(from);
             editor.putLong(DATE_FROM, date).apply();
+            long date2 = Converters.dateToTimestamp(to);
+            editor.putLong(DATE_TO, date2).apply();
         }
-        if(to != null){
-            long date = Converters.dateToTimestamp(to);
-            editor.putLong(DATE_TO, date).apply();
+        else{
+            editor.putLong(DATE_TO, LIMIT_MAX_DATE).apply();
+            editor.putLong(DATE_FROM,LIMIT_MIN_DATE).apply();
         }
     }
-
     public void setDateToPreference(Date to){
         if(to != null){
             long date = Converters.dateToTimestamp(to);
             editor.putLong(DATE_TO, date).apply();
         }
-        else editor.putLong(DATE_TO, Long.MAX_VALUE).apply();
+        else editor.putLong(DATE_TO, LIMIT_MAX_DATE).apply();
     }
 
     public void setDateFromPreference(Date from){
@@ -78,7 +85,7 @@ public class PreferenceManager {
             long date = Converters.dateToTimestamp(from);
             editor.putLong(DATE_FROM, date).apply();
         }
-        else editor.putLong(DATE_FROM,Long.MIN_VALUE).apply();
+        else editor.putLong(DATE_FROM,LIMIT_MIN_DATE).apply();
     }
 
     public Date getDateFromPreference() throws ParseException {
@@ -97,7 +104,7 @@ public class PreferenceManager {
     }
 
     public int getMinPressureFrom(){
-            return sharedPreferences.getInt(MIN_PRESSURE_LOWER_BOUND, -1);
+            return sharedPreferences.getInt(MIN_PRESSURE_LOWER_BOUND, DEFAULT_MIN_INT);
     }
 
     public void setMinPressureTo(int minPressureTo){
@@ -105,7 +112,7 @@ public class PreferenceManager {
     }
 
     public int getMinPressureTo(){
-        return sharedPreferences.getInt(MIN_PRESSURE_UPPER_BOUND, -1);
+        return sharedPreferences.getInt(MIN_PRESSURE_UPPER_BOUND, DEFAULT_MAX_INT);
     }
 
     public void setMaxPressureFrom(int maxPressureFrom){
@@ -113,7 +120,7 @@ public class PreferenceManager {
     }
 
     public int getMaxPressureFrom(){
-        return sharedPreferences.getInt(MAX_PRESSURE_LOWER_BOUND, -1);
+        return sharedPreferences.getInt(MAX_PRESSURE_LOWER_BOUND, DEFAULT_MIN_INT);
     }
 
     public void setMaxPressureTo(int maxPressureTo){
@@ -121,7 +128,7 @@ public class PreferenceManager {
     }
 
     public int getMaxPressureTo(){
-        return sharedPreferences.getInt(MAX_PRESSURE_UPPER_BOUND, -1);
+        return sharedPreferences.getInt(MAX_PRESSURE_UPPER_BOUND, DEFAULT_MAX_INT);
     }
 
     public void setTemperatureTo(double temperatureTo){
@@ -129,7 +136,7 @@ public class PreferenceManager {
     }
 
     public double getTemperatureTo(){
-        return Converters.getDouble(sharedPreferences, TEMPERATURE_TO, -1);
+        return Converters.getDouble(sharedPreferences, TEMPERATURE_TO, DEFAULT_MAX_DOUBLE);
     }
 
     public void setTemperatureFrom(double temperatureFrom){
@@ -137,16 +144,16 @@ public class PreferenceManager {
     }
 
     public double getTemperatureFrom(){
-        return Converters.getDouble(sharedPreferences, TEMPERATURE_FROM, -1);
+        return Converters.getDouble(sharedPreferences, TEMPERATURE_FROM, DEFAULT_MIN_DOUBLE);
     }
 
 
     public void setWeightTo(double weightTo){
-            Converters.putDouble(editor, WEIGHT_TO,  weightTo);
+        Converters.putDouble(editor, WEIGHT_TO,  weightTo);
     }
 
     public double getWeightTo(){
-        return Converters.getDouble(sharedPreferences, WEIGHT_TO, -1);
+        return Converters.getDouble(sharedPreferences, WEIGHT_TO, DEFAULT_MAX_DOUBLE);
     }
 
 
@@ -155,7 +162,7 @@ public class PreferenceManager {
     }
 
     public double getWeightFrom(){
-        return Converters.getDouble(sharedPreferences, WEIGHT_FROM, -1);
+        return Converters.getDouble(sharedPreferences, WEIGHT_FROM, DEFAULT_MIN_DOUBLE);
     }
 
 
@@ -174,5 +181,49 @@ public class PreferenceManager {
 
         this.setTemperatureFrom(-1);
         this.setTemperatureTo(-1);
+    }
+
+    public boolean filteringRecord(Record r) throws ParseException {
+        boolean ok;
+
+        ok =    r.getDate().after(getDateFromPreference()) &&
+                r.getDate().before(getDateToPreference());
+
+        if (getMinPressureFrom() != -1){
+            ok = ok && r.getMin_pressure() >= getMinPressureFrom();
+        }
+
+        if(getMinPressureTo() != -1){
+            ok = ok &&  r.getMin_pressure() <= getMinPressureTo();
+        }
+
+        if(getMaxPressureFrom() != -1){
+            ok = ok && r.getMax_pressure() >= getMaxPressureFrom();
+        }
+
+        if(getMaxPressureTo() != -1){
+            ok = ok && r.getMax_pressure() <= getMaxPressureTo();
+        }
+
+        if(getTemperatureFrom() != -1){
+            ok = ok && r.getMax_pressure() <= getMaxPressureTo();
+        }
+
+        if(getTemperatureFrom() != -1){
+            ok = ok && r.getTemperature() >= getTemperatureFrom();
+        }
+
+        if(getTemperatureTo() != -1){
+            ok = ok && r.getTemperature() >= getTemperatureTo();
+        }
+
+        if(getWeightFrom() != -1){
+            ok = ok && r.getWeight() >= getWeightFrom();
+        }
+
+        if(getWeightTo() != -1) {
+            ok = ok && r.getWeight() >= getWeightTo();
+        }
+        return ok;
     }
 }

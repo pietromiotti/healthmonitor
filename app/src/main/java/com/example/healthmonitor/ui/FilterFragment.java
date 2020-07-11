@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 
 import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.R;
+import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.utils.Converters;
 import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
@@ -47,6 +48,7 @@ public class FilterFragment extends Fragment {
     private double weightFromFilterValue;
     private double weightToFilterValue;
     private PreferenceManager preferenceManager;
+    private DatabaseManager databaseManager;
 
     private MaterialButton selectDateFrom;
     private TextView selectedDataFrom;
@@ -90,6 +92,7 @@ public class FilterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.preferenceManager = PreferenceManager.getPreferenceManagerNoContext();
+        this.databaseManager = DatabaseManager.getInstanceDBNOContext();
         // Inflate the layout for this fragment
         View myview = inflater.inflate(R.layout.fragment_filter, container, false);
         navigationView = getActivity().findViewById(R.id.nav_filters);
@@ -193,6 +196,7 @@ public class FilterFragment extends Fragment {
                 preferenceManager.setWeightFrom(weightFromFilterValue);
                 preferenceManager.setWeightTo(weightToFilterValue);
 
+                databaseManager.updateFilterList();
                 getActivity().onBackPressed();
             }
         });
@@ -201,6 +205,8 @@ public class FilterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 preferenceManager.resetFilterPreference();
+                databaseManager.updateFilterList();
+
                 getActivity().onBackPressed();
             }
 
@@ -243,10 +249,10 @@ public class FilterFragment extends Fragment {
         if (!Converters.areSameDay(currentFilterToDate, Converters.fromTimestamp(Long.MAX_VALUE))) {
             selectedDataTo.setText(Converters.printDate(currentFilterToDate));
         }
-        if (currentFilterFromMinPressure != -1) {
+        if (currentFilterFromMinPressure !=  -1) {
             selectedMinPressureFrom.setText(String.valueOf(preferenceManager.getMinPressureFrom()));
         }
-        if (currentFilterToMinPressure != -1) {
+        if (currentFilterToMinPressure !=  -1) {
             selectedMinPressureTo.setText(String.valueOf(preferenceManager.getMinPressureTo()));
         }
         if (currentFilterFromMaxPressure != -1) {
@@ -255,7 +261,6 @@ public class FilterFragment extends Fragment {
         if (currentFilterToMaxPressure != -1) {
             selectedMaxPressureTo.setText(String.valueOf(preferenceManager.getMaxPressureTo()));
         }
-
         if (currentFilterFromTemperature != -1) {
             selectedTemperatureFrom.setText(String.valueOf(preferenceManager.getTemperatureFrom()));
         }

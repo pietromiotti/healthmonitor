@@ -24,6 +24,8 @@ import com.example.healthmonitor.RecordAdapter;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.ParseException;
+
 
 public class RecordsFragment extends Fragment {
     private DatabaseManager databaseManager;
@@ -52,7 +54,8 @@ public class RecordsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
-        recordAdapter = new RecordAdapter(getActivity(), databaseManager, databaseManager.recordList);
+
+        recordAdapter = new RecordAdapter(getActivity(), databaseManager, databaseManager.filteredList);
         View view =  inflater.inflate(R.layout.fragment_records, container, false);
         return view;
 

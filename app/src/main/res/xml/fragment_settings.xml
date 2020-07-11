@@ -1,0 +1,162 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Notifica Giornaliera">
+
+
+        <SwitchPreferenceCompat
+            android:key="daily_notify"
+            android:title="Notifica giornaliera"
+            android:summary="Non dimenticarti di inserire i report!"
+            android:defaultValue="false"/>
+
+        <Preference
+            android:layout="@layout/datetimepicker_layout_button"
+            android:key="dateTimePicker"
+            android:title="text"
+            app:isPreferenceVisible="false"/>
+
+        <Preference
+            android:key="datePickerValue"
+            android:title="Ora della notifica giornaliera: "
+            android:selectable="false"
+            app:isPreferenceVisible="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Priorità Campioni"
+        app:isPreferenceVisible="true">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Pressione"
+            android:summary="Seleziona la priorità della pressione"
+            android:entries="@array/priorities_entries"
+            android:entryValues="@array/priorities_values"
+            android:key="pressurePriority"
+            android:title="Pressione" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Temperatura"
+            android:summary="Seleziona la priorità della temperatura"
+            android:entries="@array/priorities_entries"
+            android:entryValues="@array/priorities_values"
+            android:key="temperaturePriority"
+            android:title="Temperatura" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Peso"
+            android:summary="Seleziona la priorità della peso"
+            android:entries="@array/priorities_entries"
+            android:entryValues="@array/priorities_values"
+            android:key="weightPriority"
+            android:title="Peso" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Threshold per parametri con priorità maggiore di 3">
+        <EditTextPreference
+            android:key="intervalTime"
+            android:title="Intervallo di tempo (in giorni)"
+            android:summary="Seleziona l'intervallo di tempo di monitoraggio"
+            android:persistent="true"
+            android:dialogTitle="Intervallo di tempo (in giorni)"
+            android:dialogMessage="Seleziona l'intervallo di tempo del monitoraggio, verrà calcolata la media dei parametri con priorità maggiori di tre in questo intervallo"
+            android:defaultValue=""
+            />
+        <Preference
+            android:key="intervalTimeValue"
+            android:title="Intervallo: "
+            android:selectable="false"
+            app:isPreferenceVisible="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pressureParameters"
+        android:title="Parametri pressione">
+
+        <EditTextPreference
+            android:key="minPressure_from"
+            android:title="Pressione Minima - Tolleranza Minima"
+            android:persistent="true"
+            android:dialogTitle="Pressione Minima"
+            android:dialogMessage="Seleziona il valore di tolleranza minimo"
+            android:defaultValue=""
+            />
+        <EditTextPreference
+            android:key="minPressure_to"
+            android:title="Pressione Minima - Tolleranza Massima"
+            android:persistent="true"
+            android:dialogTitle="Pressione Minima"
+            android:dialogMessage="Seleziona il valore di tolleranza massimo"
+            android:defaultValue=""
+            />
+        <EditTextPreference
+            android:key="maxPressure_from"
+            android:title="Pressione Massima - Tolleranza Minima"
+            android:persistent="true"
+            android:dialogTitle="Pressione Massima"
+            android:dialogMessage="Seleziona il valore di tolleranza minimo"
+            android:defaultValue=""
+            />
+        <EditTextPreference
+            android:key="maxPressure_to"
+            android:title="Pressione Massima - Tolleranza Massima"
+            android:persistent="true"
+            android:dialogTitle="Pressione Massima"
+            android:dialogMessage="Seleziona il valore di tolleranza massima"
+            android:defaultValue=""
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="temperatureParameters"
+        android:title="Parametri Temperatura">
+
+        <EditTextPreference
+            android:key="temperature_from"
+            android:title="Temperatura - Tolleranza Minima"
+            android:persistent="true"
+            android:dialogTitle="Temperatura"
+            android:dialogMessage="Seleziona il valore di tolleranza minimo"
+            android:defaultValue=""
+            />
+        <EditTextPreference
+            android:key="temperature_to"
+            android:title="Temperatura - Tolleranza Massima"
+            android:persistent="true"
+            android:dialogTitle="Temperatura"
+            android:dialogMessage="Seleziona il valore di tolleranza massimo"
+            android:defaultValue=""
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="weightParameters"
+        android:title="Parametri Peso">
+
+        <EditTextPreference
+            android:key="weight_from"
+            android:title="Peso - Tolleranza Minima"
+            android:persistent="true"
+            android:dialogTitle="Peso"
+            android:dialogMessage="Seleziona il valore di tolleranza minimo"
+            android:defaultValue=""
+            />
+        <EditTextPreference
+            android:key="weight_to"
+            android:title="Peso Minimo - Tolleranza Massima"
+            android:persistent="true"
+            android:dialogTitle="Peso"
+            android:dialogMessage="Seleziona il valore di tolleranza massimo"
+            android:defaultValue=""
+            />
+    </PreferenceCategory>
+
+</PreferenceScreen>

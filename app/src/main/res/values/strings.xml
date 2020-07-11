@@ -5,5 +5,19 @@
     <string name="hello_blank_fragment">Aggiungi un record"</string>
     <string name="add_record">Hello blank fragment</string>
     <string name="dateformat">"dd/mm/yyyy HH:mm:ss"</string>
+    <string-array name="priorities_entries">
+        <item>Priorità 1</item>
+        <item>Priorità 2</item>
+        <item>Priorità 3</item>
+        <item>Priorità 4</item>
+        <item>Priorità 5</item>
+    </string-array>
+    <string-array name="priorities_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 
 </resources>

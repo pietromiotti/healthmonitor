@@ -9,7 +9,9 @@ import androidx.room.Room;
 import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.RecordAdapter;
 import com.example.healthmonitor.ui.RecordsFragment;
+import com.example.healthmonitor.utils.PreferenceManager;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,8 +24,10 @@ public class DatabaseManager {
     String DB_NAME = "Mydb";
     public static DatabaseManager MyDatabaseManager;
     public List<Record> recordList;
+    public List<Record> filteredList;
     private MyRoomDatabase mydatabase;
     private Context context;
+    private PreferenceManager preferenceManager;
 
     private class addRecordAsyncTask extends AsyncTask<Record, Void, Void> {
         @Override
@@ -76,6 +80,12 @@ public class DatabaseManager {
             recordList = mydatabase.myDao().getRecords();
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            updateFilterList();
+        }
     }
 
     private class DatabaseManagerAsync extends  AsyncTask<Context, Void, Void>{
@@ -83,6 +93,8 @@ public class DatabaseManager {
         @Override
         protected Void doInBackground(Context... contexts) {
             mydatabase = Room.databaseBuilder(contexts[0], MyRoomDatabase.class, DB_NAME).fallbackToDestructiveMigration().build();
+            preferenceManager = PreferenceManager.getPreferenceManagerNoContext();
+            filteredList = new ArrayList<>();
             return null;
         }
 
@@ -174,9 +186,43 @@ public class DatabaseManager {
         return selectedDateRecords;
     }
 
-
-
     public void Close(){
         if (mydatabase.isOpen()) mydatabase.close();
     }
+
+
+    private class updateFilteredListAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            filteredList.clear();
+            for(int i = 0; i < recordList.size(); i++){
+                try {
+                    if (preferenceManager.filteringRecord(recordList.get(i))){
+                        filteredList.add(recordList.get(i));
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
+
+    public void updateFilterList(){
+        updateFilteredListAsyncTask updateFiltered = new updateFilteredListAsyncTask();
+        updateFiltered.execute();
+    }
+
+    /*
+    public List<Record> filteredRecords() throws ParseException {
+        List<Record> filtered = new ArrayList<>();
+        for(int i = 0; i < recordList.size(); i++){
+            if (preferenceManager.filteringRecord(recordList.get(i))){
+                filtered.add(recordList.get(i));
+            }
+        }
+        return filtered;
+    }
+
+     */
 }

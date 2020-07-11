@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:weightSum="10"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp">
+<com.google.android.material.button.MaterialButton
+    android:text="Seleziona l'ora della notifica"
+    android:backgroundTint="@color/colorAccent"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/selectTheHour"
+    android:layout_gravity="center"
+    android:clickable="false"
+    />
+</LinearLayout>
