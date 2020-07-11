@@ -95,11 +95,6 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 selectedDate.set(year,month,dayOfMonth,hour,minutes);
                 selectedDatestring = "Selected date " + dayOfMonth + "/" + (month+1) + "/" + year;
                 text.setText(selectedDatestring);
-                Date today = new Date();
-                if (CalendarFragment.selectedDate == null){
-                    today = Calendar.getInstance().getTime();
-                }
-                preferenceManager.setDatePreference(selectedDate.getTime(), today);
             }
         });
     }

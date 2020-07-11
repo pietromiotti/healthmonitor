@@ -56,6 +56,17 @@ public class Converters {
         return s;
     }
 
+    public static String printDateHourAndMinutes(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        String corrector = "";
+        if (minutes <= 9) corrector = "0";
+        String s = hours+" : "+corrector+minutes;
+        return s;
+    }
+
     public static boolean areSameDay(Date date1, Date date2){
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(date1);

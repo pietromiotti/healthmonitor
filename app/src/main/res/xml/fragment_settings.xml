@@ -68,21 +68,22 @@
             android:persistent="true"
             android:dialogTitle="Intervallo di tempo (in giorni)"
             android:dialogMessage="Seleziona l'intervallo di tempo del monitoraggio, verrà calcolata la media dei parametri con priorità maggiori di tre in questo intervallo"
-            android:defaultValue=""
+            android:defaultValue="30"
             />
         <Preference
-            android:key="intervalTimeValue"
+            android:key="intervalTime"
             android:title="Intervallo: "
             android:selectable="false"
             app:isPreferenceVisible="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="pressureParameters"
-        android:title="Parametri pressione">
+        android:key="pressureCategory"
+        android:title="Parametri pressione"
+        app:isPreferenceVisible="false">
 
         <EditTextPreference
-            android:key="minPressure_from"
+            android:key="minPressureAverageLowerBound"
             android:title="Pressione Minima - Tolleranza Minima"
             android:persistent="true"
             android:dialogTitle="Pressione Minima"
@@ -90,7 +91,7 @@
             android:defaultValue=""
             />
         <EditTextPreference
-            android:key="minPressure_to"
+            android:key="minPressureAverageUpperBound"
             android:title="Pressione Minima - Tolleranza Massima"
             android:persistent="true"
             android:dialogTitle="Pressione Minima"
@@ -98,7 +99,7 @@
             android:defaultValue=""
             />
         <EditTextPreference
-            android:key="maxPressure_from"
+            android:key="maxPressureAverageLowerBound"
             android:title="Pressione Massima - Tolleranza Minima"
             android:persistent="true"
             android:dialogTitle="Pressione Massima"
@@ -106,7 +107,7 @@
             android:defaultValue=""
             />
         <EditTextPreference
-            android:key="maxPressure_to"
+            android:key="maxPressureAverageUpperBound"
             android:title="Pressione Massima - Tolleranza Massima"
             android:persistent="true"
             android:dialogTitle="Pressione Massima"
@@ -117,11 +118,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="temperatureParameters"
-        android:title="Parametri Temperatura">
+        android:key="temperatureCategory"
+        android:title="Parametri Temperatura"
+        app:isPreferenceVisible="false">
 
         <EditTextPreference
-            android:key="temperature_from"
+            android:key="temperatureAverageLowerBound"
             android:title="Temperatura - Tolleranza Minima"
             android:persistent="true"
             android:dialogTitle="Temperatura"
@@ -129,7 +131,7 @@
             android:defaultValue=""
             />
         <EditTextPreference
-            android:key="temperature_to"
+            android:key="temperatureAverageUpperBound"
             android:title="Temperatura - Tolleranza Massima"
             android:persistent="true"
             android:dialogTitle="Temperatura"
@@ -138,11 +140,12 @@
             />
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="weightParameters"
-        android:title="Parametri Peso">
+        android:key="weightCategory"
+        android:title="Parametri Peso"
+        app:isPreferenceVisible="false">
 
         <EditTextPreference
-            android:key="weight_from"
+            android:key="weightAverageLowerBound"
             android:title="Peso - Tolleranza Minima"
             android:persistent="true"
             android:dialogTitle="Peso"
@@ -150,7 +153,7 @@
             android:defaultValue=""
             />
         <EditTextPreference
-            android:key="weight_to"
+            android:key="weightAverageUpperBound"
             android:title="Peso Minimo - Tolleranza Massima"
             android:persistent="true"
             android:dialogTitle="Peso"

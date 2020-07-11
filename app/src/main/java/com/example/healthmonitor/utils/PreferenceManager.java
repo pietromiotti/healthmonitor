@@ -9,6 +9,7 @@ import com.example.healthmonitor.RoomDatabase.Record;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PreferenceManager {
@@ -31,7 +32,20 @@ public class PreferenceManager {
     private static final String WEIGHT_TO = "WEIGHT_TO";
     private static final String PRIORITY_WEIGHT = "PRIORITY_WEIGHT";
     private static final String PRIORITY_TEMPERATURE = "PRIORITY_TEMPERATURE";
-    private static final String PRIOTIRY_PRESSURE = "PRIORITY_PRESSURE";
+    private static final String PRIORITY_PRESSURE = "PRIORITY_PRESSURE";
+    private static final String DAILY_NOTIFICATION = "DAILY_NOTIFICATION";
+    private static final String DAILY_NOTIFICATION_HOUR = "DAILY_NOTIFICATION_HOUR";
+    private static final String INTERVAL_MONITOR_TIME = "INTERVAL_MONITOR_TIME";
+    private static final String MIN_PRESSURE_MONITORING_LOWER_BOUND = "MIN_PRESSURE_MONITORING_LOWER_BOUND ";
+    private static final String MIN_PRESSURE_MONITORING_UPPER_BOUND = "MIN_PRESSURE_MONITORING_UPPER_BOUND";
+    private static final String MAX_PRESSURE_MONITORING_LOWER_BOUND = "MAX_PRESSURE_MONITORING_LOWER_BOUND ";
+    private static final String MAX_PRESSURE_MONITORING_UPPER_BOUND = "MAX_PRESSURE_MONITORING_UPPER_BOUND";
+    private static final String TEMPERATURE_MONITORING_LOWER_BOUND = "TEMPERATURE_MONITORING_LOWER_BOUND ";
+    private static final String TEMPERATURE_MONITORING_UPPER_BOUND = "TEMPERATURE_MONITORING_UPPER_BOUND";
+    private static final String WEIGHT_MONITORING_LOWER_BOUND = "WEIGHT_MONITORING_LOWER_BOUND";
+    private static final String WEIGHT_MONITORING_UPPER_BOUND = "WEIGHT_MONITORING_UPPER_BOUND";
+
+
 
     public static final long LIMIT_MIN_DATE = Long.MIN_VALUE;
     public static final long LIMIT_MAX_DATE = Long.MAX_VALUE;
@@ -226,4 +240,126 @@ public class PreferenceManager {
         }
         return ok;
     }
+
+
+    public void setDailyNotification(boolean agreement){
+        editor.putBoolean(DAILY_NOTIFICATION, agreement).apply();
+    }
+    public boolean getDailyNotification(){
+        return sharedPreferences.getBoolean(DAILY_NOTIFICATION, false);
+    }
+
+    public void setDailyNotificationHour(Date date){
+        long dateLong = Converters.dateToTimestamp(date);
+        editor.putLong(DAILY_NOTIFICATION_HOUR, dateLong).apply();
+    }
+    public Date getDailyNotificationHour(){
+        Calendar c = Calendar.getInstance();
+        c.set(0,0,0, 12,0);
+        return Converters.fromTimestamp(sharedPreferences.getLong(DAILY_NOTIFICATION_HOUR, Converters.dateToTimestamp(c.getTime())));
+    }
+
+
+
+    public void setWeightPriority(int priority){
+        editor.putInt(PRIORITY_WEIGHT, priority).apply();
+    }
+
+    public void setTemperaturePriority(int priority){
+        editor.putInt(PRIORITY_TEMPERATURE, priority).apply();
+    }
+
+    public void setPressurePriority(int priority){
+        editor.putInt(PRIORITY_PRESSURE, priority).apply();
+    }
+
+    public int getWeightPriority(){
+        return sharedPreferences.getInt(PRIORITY_WEIGHT, 1);
+    }
+
+    public int getTemperaturePriority(){
+        return sharedPreferences.getInt(PRIORITY_TEMPERATURE, 1);
+    }
+
+    public int getPressurePriority(){
+        return sharedPreferences.getInt(PRIORITY_PRESSURE, 1);
+    }
+
+
+    public void setIntervalMonitorTime(int days){
+        editor.putInt(INTERVAL_MONITOR_TIME, days).apply();
+    }
+
+    public int getIntervalMonitorTime(){
+        return sharedPreferences.getInt(INTERVAL_MONITOR_TIME, 30);
+    }
+
+
+    public void setMinPressureAverageLowerBound(int minPressureFrom){
+        editor.putInt(MIN_PRESSURE_MONITORING_LOWER_BOUND, minPressureFrom).apply();
+    }
+
+    public int getMinPressureAverageLowerBound(){
+        return sharedPreferences.getInt(MIN_PRESSURE_MONITORING_LOWER_BOUND, DEFAULT_MIN_INT);
+    }
+
+    public void setMinPressureAverageUpperBound(int minPressureTo){
+        editor.putInt(MIN_PRESSURE_MONITORING_UPPER_BOUND, minPressureTo).apply();
+    }
+
+    public int getMinPressureAverageUpperBound(){
+        return sharedPreferences.getInt(MIN_PRESSURE_MONITORING_UPPER_BOUND, DEFAULT_MAX_INT);
+    }
+
+    public void setMaxPressureAverageLowerBound(int maxPressureFrom){
+        editor.putInt(MAX_PRESSURE_MONITORING_LOWER_BOUND, maxPressureFrom).apply();
+    }
+
+    public int getMaxPressureAverageLowerBound(){
+        return sharedPreferences.getInt(MAX_PRESSURE_MONITORING_LOWER_BOUND, DEFAULT_MIN_INT);
+    }
+
+    public void setMaxPressureAverageUpperBound(int maxPressureTo){
+        editor.putInt(MAX_PRESSURE_MONITORING_UPPER_BOUND, maxPressureTo).apply();
+    }
+
+    public int getMaxPressureAverageUpperBound(){
+        return sharedPreferences.getInt(MAX_PRESSURE_MONITORING_UPPER_BOUND, DEFAULT_MAX_INT);
+    }
+
+    public void setTemperatureAverageUpperBound(double temperatureTo){
+        Converters.putDouble(editor, TEMPERATURE_MONITORING_UPPER_BOUND, temperatureTo);
+    }
+
+    public double getTemperatureAverageUpperBound(){
+        return Converters.getDouble(sharedPreferences, TEMPERATURE_MONITORING_UPPER_BOUND, DEFAULT_MAX_DOUBLE);
+    }
+
+    public void setTemperatureAverageLowerBound(double temperatureFrom){
+        Converters.putDouble(editor, TEMPERATURE_MONITORING_LOWER_BOUND, temperatureFrom);
+    }
+
+    public double getTemperatureAverageLowerBound(){
+        return Converters.getDouble(sharedPreferences, TEMPERATURE_MONITORING_LOWER_BOUND, DEFAULT_MIN_DOUBLE);
+    }
+
+
+    public void setWeightAverageUpperBound(double weightTo){
+        Converters.putDouble(editor, WEIGHT_MONITORING_UPPER_BOUND,  weightTo);
+    }
+
+    public double getWeightAverageUpperBound(){
+        return Converters.getDouble(sharedPreferences, WEIGHT_MONITORING_UPPER_BOUND, DEFAULT_MAX_DOUBLE);
+    }
+
+
+    public void setWeightAverageLowerBound(double weightFrom){
+        Converters.putDouble(editor, WEIGHT_MONITORING_LOWER_BOUND,  weightFrom);
+    }
+
+    public double getWeightAverageLowerBound(){
+        return Converters.getDouble(sharedPreferences, WEIGHT_MONITORING_LOWER_BOUND, DEFAULT_MIN_DOUBLE);
+    }
+
+
 }

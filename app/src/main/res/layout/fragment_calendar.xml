@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorBlueDark"
-        android:text="visualizza i record del giorno selezionato"
+        android:text="apri i record del giorno selezionato"
         app:layout_constraintBottom_toTopOf="@+id/addRecord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
