@@ -11,27 +11,18 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/textGraficoPressioni"
+        android:id="@+id/textGraficoPressioniMedie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Grafico delle pressioni"
+        android:text="Grafico delle pressioni medie"
         android:gravity="center"
         android:layout_weight="0.5"/>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/linechart"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barchart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/getMyAveragePressureButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorBlueDark"
-        android:text="Visualizza le mie pressioni medie"
-
-        android:layout_weight="0.5"/>
+        android:layout_weight="9.5"/>
 
 
 </LinearLayout>

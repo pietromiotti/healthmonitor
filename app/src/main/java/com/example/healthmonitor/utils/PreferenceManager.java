@@ -17,7 +17,7 @@ public class PreferenceManager {
     private SharedPreferences.Editor editor;
     public static PreferenceManager preferenceManager;
     public Context context;
-    DateFormat dateFormat;
+    //DateFormat dateFormat;
     String name;
 
     private static final String DATE_FROM = "DATE_FROM";
@@ -44,6 +44,8 @@ public class PreferenceManager {
     private static final String TEMPERATURE_MONITORING_UPPER_BOUND = "TEMPERATURE_MONITORING_UPPER_BOUND";
     private static final String WEIGHT_MONITORING_LOWER_BOUND = "WEIGHT_MONITORING_LOWER_BOUND";
     private static final String WEIGHT_MONITORING_UPPER_BOUND = "WEIGHT_MONITORING_UPPER_BOUND";
+    private static final String FIRST_TIME_ACCESS = "FIRST_TIME_ACCESS";
+
 
 
 
@@ -59,8 +61,12 @@ public class PreferenceManager {
         this.context= context;
         this.name = this.context.getClass().getSimpleName();
         sharedPreferences = this.context.getSharedPreferences(context.getPackageName()+"."+name, Context.MODE_PRIVATE);
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        //this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         editor = this.sharedPreferences.edit();
+        if (getFirstTimeAccess()) {
+            setFirstTimeAccess();
+            resetFilterPreference();
+        }
 }
     public static PreferenceManager getPreferenceManagerWithContext(Context context) {
         if (preferenceManager == null){
@@ -360,6 +366,18 @@ public class PreferenceManager {
     public double getWeightAverageLowerBound(){
         return Converters.getDouble(sharedPreferences, WEIGHT_MONITORING_LOWER_BOUND, DEFAULT_MIN_DOUBLE);
     }
+
+
+    public boolean getFirstTimeAccess(){
+        return sharedPreferences.getBoolean(FIRST_TIME_ACCESS, true);
+    }
+
+    public void setFirstTimeAccess(){
+        editor.putBoolean(FIRST_TIME_ACCESS, false).apply();
+    }
+
+
+
 
 
 }

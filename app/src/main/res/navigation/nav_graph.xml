@@ -41,21 +41,20 @@
     <fragment
         android:id="@+id/nav_chart"
         android:name="com.example.healthmonitor.ui.ChartsFragment"
-        android:label="Your Stats"
-        tools:layout="@layout/fragment_charts" />
+        android:label="Le tue statistiche"
+        tools:layout="@layout/fragment_charts" >
+        <action
+            android:id="@+id/action_nav_chart_to_nav_chart_average"
+            app:destination="@id/nav_chart_average" />
+    </fragment>
     <fragment
         android:id="@+id/my_settings"
         android:name="com.example.healthmonitor.ui.SettingsFragment"
         android:label="Settings"
         tools:xml="@xml/preference" />
     <fragment
-        android:id="@+id/my_alarm"
-        android:name="com.example.healthmonitor.ui.AlarmsFragment"
-        android:label="Your Notification"
-        tools:layout="@layout/fragment_alarms" />
-    <fragment
-        android:id="@+id/my_therapy"
-        android:name="com.example.healthmonitor.ui.TherapyFragment"
-        android:label="Your Therapy"
-        tools:layout="@layout/fragment_therapy" />
+        android:id="@+id/nav_chart_average"
+        android:name="com.example.healthmonitor.ui.ChartsFragmentAverage"
+        android:label="Valori medi"
+        tools:layout="Le tue medie" />
 </navigation>

@@ -56,6 +56,17 @@ public class Converters {
         return s;
     }
 
+    public static String printDateDayMonthYear(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String s = day + "/" + month + "/" +year;
+        return s;
+    }
+
     public static String printDateHourAndMinutes(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

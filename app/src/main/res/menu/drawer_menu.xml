@@ -22,19 +22,11 @@
             android:id="@+id/nav_chart"
             android:icon="@drawable/ic_chart"
             android:title="My Charts" />
-        <item
-            android:id="@+id/my_therapy"
-            android:icon="@drawable/ic_hearing_black_24dp"
-            android:title="Therapy" />
     </group>
 
     <group
         android:id="@+id/thirdGroup"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/my_alarm"
-            android:icon="@drawable/ic_alarm"
-            android:title="My Alarms" />
         <item
             android:id="@+id/my_settings"
             android:icon="@drawable/ic_settings"

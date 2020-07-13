@@ -22,9 +22,7 @@ public interface MyDao {
     @Update
     public void updateRecord(Record record);
 
-    @Query("select * from records")
+    @Query("SELECT * FROM records ORDER BY date ASC")
     public List<Record> getRecords();
-
-
 
 }
