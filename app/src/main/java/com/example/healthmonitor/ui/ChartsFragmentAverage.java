@@ -107,9 +107,11 @@ public class ChartsFragmentAverage extends Fragment {
         dataSets.add(minPressureDataSet);
         dataSets.add(maxPressureDataSet);
 
+
         Log.i("MINPRESSURE", "DATASET" + dataSets.toString());
 
         BarData data = new BarData(dataSets);
+        data.setValueTextSize(12f);
 
         barChart.setData(data);
 
@@ -119,7 +121,7 @@ public class ChartsFragmentAverage extends Fragment {
         data.setBarWidth(0.50f);
 
         barChart.setDragEnabled(true);
-        barChart.setVisibleXRangeMaximum(4.5f);
+        barChart.setVisibleXRangeMaximum(4f);
 
 
         barChart.groupBars(0, 0, 0);
@@ -128,14 +130,13 @@ public class ChartsFragmentAverage extends Fragment {
         barChart.getXAxis().setAxisMinValue(0);
         barChart.getXAxis().setAxisMaximum(12f);
 
+
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(months));
         xAxis.setCenterAxisLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
-
-
 
 
         YAxis leftAxis = barChart.getAxisLeft();
@@ -159,7 +160,7 @@ public class ChartsFragmentAverage extends Fragment {
         ArrayList<Record> mylist = new ArrayList<>(databaseManager.recordList);
 
         for(int q= 0; q<12; q++){
-            sparseMatrix.add(new ArrayList<Double>());
+            sparseMatrix.add(new ArrayList<Double>(0));
         }
 
         Record current;
@@ -191,7 +192,10 @@ public class ChartsFragmentAverage extends Fragment {
             for(int m= 0; m< currentArrayList.size(); m++){
                 total = total + currentArrayList.get(m);
             }
-            average = (float) total / currentArrayList.size();
+            if(currentArrayList.size()!= 0){
+                average = (float) total / currentArrayList.size();
+            }
+            else average = 0;
             actual.add(new BarEntry(i, average));
         }
         return actual;
@@ -221,6 +225,7 @@ public class ChartsFragmentAverage extends Fragment {
                 }
             }
         }
+
         finalresult_minPressure = (float) totalMinPressure / counterMinPressure;
         finalresut_maxPressure = (float) totalMaxPressure / counterMaxPressure;
 
