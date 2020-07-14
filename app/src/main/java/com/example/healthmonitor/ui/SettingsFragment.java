@@ -168,7 +168,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     int value = Integer.parseInt(newValue.toString());
                     preferenceManager.setIntervalMonitorTime(value);
                     intervalTime.setSummary("Attuale tempo di monitoraggio " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -179,7 +179,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     int value = Integer.parseInt(newValue.toString());
                     preferenceManager.setMinPressureAverageLowerBound(value);
                     minPressureAverageLowerBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -190,7 +190,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setMinPressureAverageUpperBound(value);
                     minPressureAverageUpperBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -201,7 +201,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setMaxPressureAverageLowerBound(value);
                     maxPressureAverageLowerBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -213,7 +213,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setMaxPressureAverageUpperBound(value);
                     maxPressureAverageUpperBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -225,7 +225,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setWeightAverageLowerBound(value);
                     weightAverageLowerBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -237,7 +237,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setWeightAverageUpperBound(value);
                     weightAverageUpperBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });
@@ -249,7 +249,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setTemperatureAverageLowerBound(value);
                     temperatureAverageLowerBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
+
                     return false;
                 }
             });;
@@ -260,7 +260,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
                     preferenceManager.setTemperatureAverageUpperBound(value);
                     temperatureAverageUpperBound.setSummary("Threshold attuale: " + value);
-                    notificationHandler.triggerNotificationInfo();
                     return false;
                 }
             });

@@ -335,8 +335,14 @@ public class DatabaseManager {
         return average;
     }
 
-
-
+    public boolean todayAlreadyRecorded(){
+        Date today = new Date();
+        List<Record> mylist = getRecordsDate(today);
+        if(mylist.size() != 0) {
+            return true;
+        }
+        else return false;
+    }
 
     /*
     public List<Record> filteredRecords() throws ParseException {
