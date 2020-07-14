@@ -80,15 +80,16 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
 
      class RecordViewHolder extends RecyclerView.ViewHolder implements DialogRecord.DialogListener{
-        public TextView textViewMinPressure;
-        public TextView textViewMaxPressure;
-        public TextView textViewTemperature;
-        public TextView textViewWeight;
-        public TextView textViewDate;
+        private TextView textViewMinPressure;
+        private TextView textViewMaxPressure;
+        private TextView textViewTemperature;
+        private TextView textViewWeight;
+        private TextView textViewDate;
         public Context context;
 
-        public MaterialButton editButton;
-        public MaterialButton deleteButton;
+        private MaterialButton editButton;
+        private MaterialButton deleteButton;
+
 
         public RecordViewHolder(View view, final Context context) {
             super(view);
@@ -140,15 +141,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
          public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
             Record oldRecord = recordList.get(position);
             databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);notifyItemChanged(position);
-
-            Toast.makeText(context.getApplicationContext(), "EDIT RECORD" + position, Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(), "EDIT RECORD" , Toast.LENGTH_LONG).show();
+            notificationHandler.triggerNotificationInfo();
          }
 
          @Override
          public void dialogAddRecord(Record r) {
-            databaseManager.addRecord(r);
-            Toast.makeText(context.getApplicationContext(), "Added in the DB", Toast.LENGTH_LONG).show();
-
          }
     }
 }

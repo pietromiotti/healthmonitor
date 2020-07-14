@@ -145,9 +145,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
 
     @Override
     public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
-
     }
-
 
 
 }
