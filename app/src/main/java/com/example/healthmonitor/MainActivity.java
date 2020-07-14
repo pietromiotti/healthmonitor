@@ -15,6 +15,7 @@ import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
+import com.example.healthmonitor.utils.NotificationHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navView;
     DrawerLayout drawer;
     Toolbar toolbar;
+    NotificationHandler notificationHandler;
     public DatabaseManager databaseManager;
     public PreferenceManager preferenceManager;
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, nav);
         this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getApplicationContext());
         this.databaseManager = DatabaseManager.getInstanceDb(this);
-
+        this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandler(getApplicationContext());
 
     }
 

@@ -27,7 +27,7 @@ import java.util.Date;
 public class SettingsFragment extends PreferenceFragmentCompat  {
 
 
-    private int PRIORITY_MONITOR_VALUE = 3;
+    private int PRIORITY_MONITOR_VALUE = PreferenceManager.DEFAULT_MONITOR_VALUE;
     MaterialButton selectHour;
     PreferenceManager preferenceManager;
 

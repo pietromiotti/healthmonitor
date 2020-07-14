@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.MyRoomDatabase;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.utils.NotificationHandler;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
@@ -33,10 +34,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     DatabaseManager databaseManager;
     DialogRecord dialog = new DialogRecord(databaseManager);
     RecordAdapter recordAdapter;
+    NotificationHandler notificationHandler;
 
     public RecordAdapter(Context context, DatabaseManager databaseManager, List<Record> list){
         this.context = context;
         this.recordList = list;
+        this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandlerNoContext();
     }
 
     @NonNull
@@ -141,15 +144,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             Toast.makeText(context.getApplicationContext(), "EDIT RECORD" + position, Toast.LENGTH_LONG).show();
          }
 
-
          @Override
          public void dialogAddRecord(Record r) {
             databaseManager.addRecord(r);
             Toast.makeText(context.getApplicationContext(), "Added in the DB", Toast.LENGTH_LONG).show();
+
          }
-
     }
-
-
-
 }

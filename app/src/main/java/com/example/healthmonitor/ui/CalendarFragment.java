@@ -21,6 +21,7 @@ import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.MyRoomDatabase;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.utils.NotificationHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,6 +43,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
    public static Calendar selectedDate;
    private String selectedDatestring;
    private TextView text;
+   NotificationHandler notificationHandler;
    private PreferenceManager preferenceManager;
 
 
@@ -73,6 +75,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
         // Inflate the layout for this fragment
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
         this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getActivity().getApplicationContext());
+        this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandler(getActivity().getApplicationContext());
         Log.i("DATE", "CALENDAR -->" + this.preferenceManager.context.toString());
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         return view;
@@ -137,7 +140,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
     @Override
     public void dialogAddRecord(Record r) {
            this.databaseManager.addRecord(r);
-        //TODO implement AddRecord from Database
+            notificationHandler.triggerNotificationInfo();
     }
 
     @Override

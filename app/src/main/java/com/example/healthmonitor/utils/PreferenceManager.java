@@ -9,6 +9,7 @@ import com.example.healthmonitor.RoomDatabase.Record;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,7 +46,7 @@ public class PreferenceManager {
     private static final String WEIGHT_MONITORING_LOWER_BOUND = "WEIGHT_MONITORING_LOWER_BOUND";
     private static final String WEIGHT_MONITORING_UPPER_BOUND = "WEIGHT_MONITORING_UPPER_BOUND";
     private static final String FIRST_TIME_ACCESS = "FIRST_TIME_ACCESS";
-
+    public static int DEFAULT_MONITOR_VALUE = 3;
 
 
 
@@ -376,8 +377,20 @@ public class PreferenceManager {
         editor.putBoolean(FIRST_TIME_ACCESS, false).apply();
     }
 
+    public boolean pressurePriorityGreaterThanMonitorValue(){
+        if (getPressurePriority() >= DEFAULT_MONITOR_VALUE) return true;
+        else return false;
+    }
 
+    public boolean temperaturePriorityGreaterThanMonitorValue(){
+        if (getTemperaturePriority() >= DEFAULT_MONITOR_VALUE) return true;
+        else return false;
+    }
 
+    public boolean weightPriorityGreaterThanMonitorValue(){
+        if (getWeightPriority() >= DEFAULT_MONITOR_VALUE) return true;
+        else return false;
+    }
 
 
 }

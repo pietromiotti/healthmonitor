@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
 import com.example.healthmonitor.ui.CalendarFragment;
+import com.example.healthmonitor.utils.NotificationHandler;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -21,6 +22,7 @@ import java.util.Date;
 
 public class DialogRecord extends DialogFragment{
     private DatabaseManager databaseManager;
+    private NotificationHandler notificationHandler;
 
     public DialogRecord() {}
 

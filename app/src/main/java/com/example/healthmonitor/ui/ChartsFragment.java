@@ -136,20 +136,22 @@ public class ChartsFragment extends Fragment{
         set2.setValueTextColor(Color.BLACK);
         set2.setFillAlpha(110);
 
-
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
         dataSets.add(set2);
+
 
         LineData data = new LineData(dataSets);
 
         lineChart.setData(data);
         lineChart.getDescription().setEnabled(false);
+        //lineChart.setVisibleXRangeMaximum(3);
+        lineChart.setDragEnabled(true);
 
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new MyAxisFormatter());
-        xAxis.setGranularity(1);
+        xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
 
         averageButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_chart_average, null));
