@@ -225,12 +225,13 @@ public class DatabaseManager {
         ArrayList<Record> recordsInIntervalTine = new ArrayList<>();
         Calendar myLimitDate = Calendar.getInstance();
         Date today = new Date();
+
         myLimitDate.setTime(today);
         myLimitDate.add(Calendar.DAY_OF_MONTH, - preferenceManager.getIntervalMonitorTime());
         Record current;
         for(int i= 0; i< recordList.size(); i++){
             current = recordList.get(i);
-            if(current.getDate().after(myLimitDate.getTime()) && (current.getDate().before(today))){
+            if(current.getDate().after(myLimitDate.getTime()) && ((current.getDate().before(today) || (current.getDate().equals(today))))){
                 recordsInIntervalTine.add(current);
             }
         }
@@ -295,38 +296,41 @@ public class DatabaseManager {
         double average = 0;
         int counter = 0;
         Record current;
-        for(int i = 0; i< myList.size();i++){
-               current = myList.get(i);
-               switch(type){
-                   case minPressureType:
-                       if(current.getMin_pressure() != -1){
-                           sum = sum + current.getMin_pressure();
-                           counter = counter+1;
-                       }
-                       break;
-                   case maxPressureType:
-                       if(current.getMax_pressure() != -1){
-                           sum = sum + current.getMax_pressure();
-                           counter = counter+1;
-                       }
-                       break;
-                   case temperatureType:
-                       if(current.getTemperature() != -1){
-                           sum = sum + current.getTemperature();
-                           counter = counter+1;
-                       }
-                       break;
-                   case weightType:
-                       if(current.getWeight() != -1){
-                           sum = sum + current.getWeight();
-                           counter = counter+1;
-                       }
-                       break;
-                   default:
-                       break;
-               }
+        if (myList.size() != 0) {
+            for (int i = 0; i < myList.size(); i++) {
+                current = myList.get(i);
+                switch (type) {
+                    case minPressureType:
+                        if (current.getMin_pressure() != -1) {
+                            sum = sum + current.getMin_pressure();
+                            counter = counter + 1;
+                        }
+                        break;
+                    case maxPressureType:
+                        if (current.getMax_pressure() != -1) {
+                            sum = sum + current.getMax_pressure();
+                            counter = counter + 1;
+                        }
+                        break;
+                    case temperatureType:
+                        if (current.getTemperature() != -1) {
+                            sum = sum + current.getTemperature();
+                            counter = counter + 1;
+                        }
+                        break;
+                    case weightType:
+                        if (current.getWeight() != -1) {
+                            sum = sum + current.getWeight();
+                            counter = counter + 1;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            average = sum / counter;
         }
-        average = sum /counter;
+        else average = 0;
         Log.i("AVERAGE", "AVERAGE: ->" + average);
         return average;
     }

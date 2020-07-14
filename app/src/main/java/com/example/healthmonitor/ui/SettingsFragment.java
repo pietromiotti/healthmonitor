@@ -294,11 +294,11 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             }
             int minLowerBound = preferenceManager.getMinPressureAverageLowerBound();
             if(minLowerBound != Integer.MIN_VALUE){
-                maxPressureAverageLowerBound.setSummary("Threshold attuale: " + minLowerBound);
+                minPressureAverageLowerBound.setSummary("Threshold attuale: " + minLowerBound);
             }
             int minUpperBound = preferenceManager.getMinPressureAverageUpperBound();
             if(minUpperBound != Integer.MAX_VALUE){
-                maxPressureAverageLowerBound.setSummary("Threshold attuale: " + minUpperBound);
+                minPressureAverageUpperBound.setSummary("Threshold attuale: " + minUpperBound);
             }
             pressureCategory.setVisible(true);
         }
