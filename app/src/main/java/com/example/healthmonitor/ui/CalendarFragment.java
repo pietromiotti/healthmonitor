@@ -125,9 +125,29 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 e.printStackTrace();
             }
         }
+
+        /* Check if the Fragment was open by the notification, in case open de addDialog */
+        if(getActivity().getIntent().getExtras() != null){
+            Bundle extras = getActivity().getIntent().getExtras();
+            if (extras != null) {
+                if (extras.containsKey("NotificationMessage")) {
+                    if (extras.getBoolean("NotificationMessage")) {
+                        /*Reset the extras in order to not reopen addDialog every time CalendarFragment is Resumed */
+                        getActivity().getIntent().replaceExtras(Bundle.EMPTY);
+                        getActivity().getIntent().getExtras().putBoolean("NotificationMessage", false);
+                        openAddDialog();
+                    }
+                }
+            }
+
+        }
         super.onResume();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     public void openAddDialog(){
         DialogRecord dialog = new DialogRecord(this.databaseManager);
@@ -146,6 +166,5 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
     @Override
     public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
     }
-
 
 }

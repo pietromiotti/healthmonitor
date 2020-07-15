@@ -335,7 +335,7 @@ public class DatabaseManager {
         return average;
     }
 
-    public boolean todayAlreadyRecorded(){
+    public boolean isTodayAlreadyRecorded(){
         Date today = new Date();
         List<Record> mylist = getRecordsDate(today);
         if(mylist.size() != 0) {

@@ -116,10 +116,11 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                            Calendar selectedHourDate = Calendar.getInstance();
-                            selectedHourDate.set(0,0,0, selectedHour, selectedMinute);
-                            preferenceManager.setDailyNotificationHour(selectedHourDate.getTime());
-                            SettingsFragment.selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(selectedHourDate.getTime()));
+                            Calendar newCalendar = Calendar.getInstance();
+                            newCalendar.set(0,0,0,selectedHour,selectedMinute,0);
+                            notificationHandler.startAlarm(newCalendar);
+                            preferenceManager.setDailyNotificationHour(newCalendar.getTime());
+                            SettingsFragment.selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(newCalendar.getTime()));
                         }
                     }, hour, minute, true);//Yes 24 hour time
                     mTimePicker.setTitle("Scegli l'ora");
@@ -198,7 +199,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int value = Integer.parseInt(newValue.toString());
-
                     preferenceManager.setMaxPressureAverageLowerBound(value);
                     maxPressureAverageLowerBound.setSummary("Threshold attuale: " + value);
 
@@ -210,7 +210,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int value = Integer.parseInt(newValue.toString());
-
                     preferenceManager.setMaxPressureAverageUpperBound(value);
                     maxPressureAverageUpperBound.setSummary("Threshold attuale: " + value);
 
@@ -222,7 +221,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-
                     preferenceManager.setWeightAverageLowerBound(value);
                     weightAverageLowerBound.setSummary("Threshold attuale: " + value);
 
@@ -234,7 +232,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-
                     preferenceManager.setWeightAverageUpperBound(value);
                     weightAverageUpperBound.setSummary("Threshold attuale: " + value);
 
@@ -246,7 +243,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-
                     preferenceManager.setTemperatureAverageLowerBound(value);
                     temperatureAverageLowerBound.setSummary("Threshold attuale: " + value);
 
@@ -286,11 +282,15 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 datePicker.setVisible(visible);
                 selectedHour.setVisible(visible);
                 Date date = preferenceManager.getDailyNotificationHour();
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                //notificationHandler.startAlarm(c);
                 selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(date));
             }
             else{
                 datePicker.setVisible(false);
                 selectedHour.setVisible(false);
+                notificationHandler.cancelAlarm();
             }
         }
 
