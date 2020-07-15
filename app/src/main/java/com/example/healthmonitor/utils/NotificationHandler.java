@@ -10,14 +10,22 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RemoteViews;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
+import com.example.healthmonitor.ui.CalendarFragment;
+import com.google.android.material.button.MaterialButton;
 
+import java.net.Inet4Address;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NotificationHandler {
     public static NotificationHandler notificationHandler;
@@ -29,6 +37,11 @@ public class NotificationHandler {
     public static final int TEMPERATURE_ID = 2;
     public static final int WEIGHT_ID = 3;
     public static final int DAILY_ID = 4;
+    public static final int EVENT_DAILY_ID = 3;
+    public static final String DELAY_ACTION = "DELAYFIVEMINUTESACTION";
+    public static final String ADD_ACTION = "ADDACTION";
+
+
 
     NotificationManager notificationManager;
     DatabaseManager databaseManager;
@@ -94,15 +107,14 @@ public class NotificationHandler {
                 .setSmallIcon(R.drawable.ic_warning_black_24dp);
     }
 
-    public NotificationCompat.Builder getDailyNotification(PendingIntent pendingIntent){
-        Log.i("NOTIFICATION", "get daily notification");
+    public NotificationCompat.Builder getDailyNotification(){
+
         return new NotificationCompat.Builder(context.getApplicationContext(), channelDailyID)
                 .setContentTitle("Aggiungi il tuo record")
                 .setContentText("Non trascurarti!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{0,500,1000})
-                .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setSmallIcon(R.drawable.ic_alarm);
     }
@@ -133,16 +145,13 @@ public class NotificationHandler {
         asyncNotificationInfo.execute();
     }
 
+
     /*
     public class AsyncNotificationDaily extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if (!databaseManager.isTodayAlreadyRecorded()){
-                NotificationCompat.Builder bd = getDailyNotification();
-                notificationManager.notify(DAILY_ID, bd.build());
-                Log.i("DAILY", "DOVEVA PARTIRE CAZZO");
-            }
+
             return null;
         }
     }
@@ -151,40 +160,75 @@ public class NotificationHandler {
         AsyncNotificationDaily asyncNotificationDaily = new AsyncNotificationDaily();
         asyncNotificationDaily.execute();
     }
+*/
 
-
-     */
     public void startAlarm(Calendar c){
 
+        /* Check if the time setted is before the actual time, in case add one day */
+        Date nowDate = new Date();
+        Calendar myDate = Calendar.getInstance();
+
+        myDate.set(Calendar.DAY_OF_MONTH, c.get(Calendar.HOUR_OF_DAY));
+        myDate.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+
+        Log.i("NOTIFICATION", "START ALARM -> ACTIVE NOTIFICATIONS -> " + notificationManager.getActiveNotifications().toString());
+
+        if(c.after(Calendar.getInstance())){
+
+            myDate.add(Calendar.DATE,1);
+
+            Log.i("NOTIFICATION", "C-> " + Converters.printDate(Calendar.getInstance().getTime()));
+            Log.i("NOTIFICATION", " ALARM -> " + Converters.printDate(myDate.getTime()));
+        }
+
+        /*Alarm Manager Settings */
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        /* Used InexactRepeating to avoid problem in handling notification */
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-
-        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
+
+    public void delayFiveMinute(Calendar c){
+
+        /* Check if the time setted is before the actual time, in case add one day */
+        Date nowDate = new Date();
+        Calendar now = Calendar.getInstance();
+        now.setTime(nowDate);
+
+        if(c.before(now)){
+            c.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        /*Alarm Manager Settings */
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        /* Used InexactRepeating to avoid problem in handling notification */
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+    }
+
 
     public void cancelAlarm(){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.cancel(pendingIntent);
+
+        notificationManager.cancel(DAILY_ID);
+
     }
-
-    public void overrideAlarm(Calendar c){
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-    }
-
-
 
 
 }

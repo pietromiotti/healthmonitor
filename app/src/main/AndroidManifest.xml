@@ -23,6 +23,14 @@
         </activity>
         <receiver android:name=".utils.AlarmReceiver"
             android:enabled="true" />
+        <receiver android:name=".utils.AlarmReceiverResolver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="DELAYFIVEMINUTESACTION"/>
+                <action android:name="ADDACTION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

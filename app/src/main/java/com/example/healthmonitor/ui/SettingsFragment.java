@@ -102,6 +102,13 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     preferenceManager.setDailyNotification(switched);
                     makeDatePickerVisible();
 
+                    Date date = preferenceManager.getDailyNotificationHour();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(date);
+                    if(switched){
+                        resetAlarm(c);
+                    }
+
                     return true;
                 }
             });
@@ -122,7 +129,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                             preferenceManager.setDailyNotificationHour(newCalendar.getTime());
                             SettingsFragment.selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(newCalendar.getTime()));
                         }
-                    }, hour, minute, true);//Yes 24 hour time
+                    }, hour, minute, true);
                     mTimePicker.setTitle("Scegli l'ora");
                     mTimePicker.show();
                     return true;
@@ -268,12 +275,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
         }
 
-        private void makeVisible(Preference p, int value){
-            if (value >= PRIORITY_MONITOR_VALUE){
-                p.setVisible(true);
-            }
-            else p.setVisible(false);
-        }
 
         private void makeDatePickerVisible(){
             boolean visible = preferenceManager.getDailyNotification();
@@ -282,9 +283,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 datePicker.setVisible(visible);
                 selectedHour.setVisible(visible);
                 Date date = preferenceManager.getDailyNotificationHour();
-                Calendar c = Calendar.getInstance();
-                c.setTime(date);
-                //notificationHandler.startAlarm(c);
                 selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(date));
             }
             else{
@@ -340,7 +338,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
     private void makeTemperatureVisible(int value){
         if (value==-1) value = preferenceManager.getTemperaturePriority();
         temperaturePriority.setValue(String.valueOf(value));
-        //Toast.makeText(getActivity(), "Default value" + temperaturePriority.def)
+
         if(value >= PRIORITY_MONITOR_VALUE){
             double temperatureLowerBound = preferenceManager.getTemperatureAverageLowerBound();
             if(temperatureLowerBound != Double.MIN_VALUE){
@@ -353,6 +351,11 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             temperatureCategory.setVisible(true);
         }
         else temperatureCategory.setVisible(false);
+    }
+
+    public void resetAlarm(Calendar c){
+        notificationHandler.cancelAlarm();
+        notificationHandler.startAlarm(c);
     }
 
 }

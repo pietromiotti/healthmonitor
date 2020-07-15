@@ -21,6 +21,7 @@
         </activity>
         <receiver android:name=".utils.AlarmReceiver"
             android:enabled="true" />
+        <receiver android:name=".utils.AlarmReceiverResolver"/>
     </application>
 
 </manifest>

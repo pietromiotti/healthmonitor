@@ -30,7 +30,6 @@ public class DatabaseManager {
     private PreferenceManager preferenceManager;
 
 
-
     private final int minPressureType = 1;
     private final int maxPressureType = 2;
     private final int temperatureType = 3;
