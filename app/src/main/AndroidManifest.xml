@@ -22,13 +22,18 @@
             </intent-filter>
         </activity>
         <receiver android:name=".utils.AlarmReceiver"
-            android:enabled="true" />
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".utils.AlarmReceiverResolver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="DELAYFIVEMINUTESACTION"/>
                 <action android:name="ADDACTION"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
     </application>

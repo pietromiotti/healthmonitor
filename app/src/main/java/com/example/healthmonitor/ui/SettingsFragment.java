@@ -105,9 +105,11 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     Date date = preferenceManager.getDailyNotificationHour();
                     Calendar c = Calendar.getInstance();
                     c.setTime(date);
+                    Log.i("NOTIFICATION", "ALARM FROM PREFERENCE MANAGER" + Converters.printDate(c.getTime()));
                     if(switched){
-                        resetAlarm(c);
+                        notificationHandler.startAlarm(c);
                     }
+                    else notificationHandler.cancelAlarm();
 
                     return true;
                 }
@@ -124,7 +126,10 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             Calendar newCalendar = Calendar.getInstance();
-                            newCalendar.set(0,0,0,selectedHour,selectedMinute,0);
+                            newCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                            newCalendar.set(Calendar.MINUTE, selectedMinute);
+                            Log.i("NOTIFICATION", "TIME" + newCalendar.getTime());
+                            //newCalendar.set(0,0,0,selectedHour,selectedMinute,0);
                             notificationHandler.startAlarm(newCalendar);
                             preferenceManager.setDailyNotificationHour(newCalendar.getTime());
                             SettingsFragment.selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(newCalendar.getTime()));
@@ -353,9 +358,5 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
         else temperatureCategory.setVisible(false);
     }
 
-    public void resetAlarm(Calendar c){
-        notificationHandler.cancelAlarm();
-        notificationHandler.startAlarm(c);
-    }
 
 }

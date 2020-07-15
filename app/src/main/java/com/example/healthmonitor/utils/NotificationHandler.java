@@ -38,13 +38,19 @@ public class NotificationHandler {
     public static final int WEIGHT_ID = 3;
     public static final int DAILY_ID = 4;
     public static final int EVENT_DAILY_ID = 3;
+    public static final int EVENT_DELAY_ID = 4;
+
     public static final String DELAY_ACTION = "DELAYFIVEMINUTESACTION";
+    public static final String EVENT_DELAY_ACTION = "EVENT_DELAY_ACTION";
     public static final String ADD_ACTION = "ADDACTION";
+    private static int MINUTE_DELAY = 5;
+
 
 
 
     NotificationManager notificationManager;
     DatabaseManager databaseManager;
+    PreferenceManager preferenceManager;
 
 
     Context context;
@@ -52,6 +58,7 @@ public class NotificationHandler {
     public NotificationHandler(Context context) {
         this.context = context;
         databaseManager = DatabaseManager.getInstanceDBNOContext();
+        preferenceManager = PreferenceManager.getPreferenceManagerNoContext();
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
             createChannels();
         }
@@ -146,12 +153,37 @@ public class NotificationHandler {
     }
 
 
-    /*
-    public class AsyncNotificationDaily extends AsyncTask<Void, Void, Void>{
+
+    public class AsyncNotificationDaily extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            if (!databaseManager.isTodayAlreadyRecorded()) {
 
+                notificationManager = notificationHandler.getNotificationManager();
+
+                Intent reperatingIntent = new Intent(context, AlarmReceiverResolver.class);
+                reperatingIntent.putExtra("NotificationMessage", true);
+                reperatingIntent.setAction(NotificationHandler.ADD_ACTION);
+                reperatingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                reperatingIntent.putExtra("ACTION", NotificationHandler.ADD_ACTION);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), reperatingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                Intent delayFiveMinute = new Intent(context, AlarmReceiverResolver.class);
+                delayFiveMinute.putExtra("ACTION", NotificationHandler.DELAY_ACTION);
+                delayFiveMinute.setAction(NotificationHandler.DELAY_ACTION);
+                delayFiveMinute.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent delayFiveMinutesPendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), delayFiveMinute, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                NotificationCompat.Builder bd = notificationHandler.getDailyNotification();
+                bd.addAction(R.drawable.ic_library_add_black_24dp, "Aggiungi Record", pendingIntent);
+                bd.addAction(R.drawable.ic_add_black_24dp, "Ritarda", delayFiveMinutesPendingIntent);
+
+                notificationManager.notify(NotificationHandler.DAILY_ID, bd.build());
+
+            }
             return null;
         }
     }
@@ -160,25 +192,44 @@ public class NotificationHandler {
         AsyncNotificationDaily asyncNotificationDaily = new AsyncNotificationDaily();
         asyncNotificationDaily.execute();
     }
-*/
+
+    public class AsyncResolveNotificationDaily extends AsyncTask<String, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String action = strings[0];
+            if(NotificationHandler.ADD_ACTION.equals(action)){
+                Intent reperatingIntent = new Intent(context, MainActivity.class);
+                reperatingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                /*This extra is a helper that helps me to distinguish when the main activity is triggered by the notification, for the details check on MainActivity.java*/
+                reperatingIntent.putExtra("NotificationMessage", true);
+                context.startActivity(reperatingIntent);
+                notificationManager.cancel(NotificationHandler.DAILY_ID);
+            }
+            else if (NotificationHandler.DELAY_ACTION.equals(action)){
+                notificationHandler.delayFiveMinutes();
+                notificationManager.cancel(NotificationHandler.DAILY_ID);
+            }
+            return null;
+        }
+    }
+
+    public void resolveNotificationDaily(String s){
+        AsyncResolveNotificationDaily asyncResolveNotificationDaily = new AsyncResolveNotificationDaily();
+        asyncResolveNotificationDaily.execute(s);
+    }
+
+
+
 
     public void startAlarm(Calendar c){
 
         /* Check if the time setted is before the actual time, in case add one day */
-        Date nowDate = new Date();
-        Calendar myDate = Calendar.getInstance();
+        if(c.before(Calendar.getInstance())){
 
-        myDate.set(Calendar.DAY_OF_MONTH, c.get(Calendar.HOUR_OF_DAY));
-        myDate.set(Calendar.MINUTE, c.get(Calendar.MINUTE));
+            c.add(Calendar.DATE,1);
 
-        Log.i("NOTIFICATION", "START ALARM -> ACTIVE NOTIFICATIONS -> " + notificationManager.getActiveNotifications().toString());
-
-        if(c.after(Calendar.getInstance())){
-
-            myDate.add(Calendar.DATE,1);
-
-            Log.i("NOTIFICATION", "C-> " + Converters.printDate(Calendar.getInstance().getTime()));
-            Log.i("NOTIFICATION", " ALARM -> " + Converters.printDate(myDate.getTime()));
         }
 
         /*Alarm Manager Settings */
@@ -186,33 +237,30 @@ public class NotificationHandler {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, EVENT_DAILY_ID, intent, 0);
 
+        cancelAlarm();
         /* Used InexactRepeating to avoid problem in handling notification */
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
 
-    public void delayFiveMinute(Calendar c){
+    public void delayFiveMinutes(){
 
-        /* Check if the time setted is before the actual time, in case add one day */
-        Date nowDate = new Date();
-        Calendar now = Calendar.getInstance();
-        now.setTime(nowDate);
-
-        if(c.before(now)){
-            c.add(Calendar.DAY_OF_YEAR, 1);
-        }
+        /* Set new time + 5 minutes */
+        Calendar myDate = Calendar.getInstance();
+        myDate.set(Calendar.MINUTE, myDate.get(Calendar.MINUTE) + MINUTE_DELAY);
 
         /*Alarm Manager Settings */
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        /*Create new notification with different EVENT CODE */
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, EVENT_DELAY_ID, intent, 0);
 
-        /* Used InexactRepeating to avoid problem in handling notification */
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        /* Note that for the delay notification I have createa a single notification, set in the time delayed, I do not override the perdioc notification*/
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, myDate.getTimeInMillis(), pendingIntent);
 
     }
 
@@ -222,7 +270,8 @@ public class NotificationHandler {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        /*Note that to delete the repeating notification need to have the same EVENT_DAILY_ID */
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, EVENT_DAILY_ID, intent, 0);
 
         alarmManager.cancel(pendingIntent);
 
