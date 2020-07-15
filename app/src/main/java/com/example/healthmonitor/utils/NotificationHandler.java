@@ -117,8 +117,8 @@ public class NotificationHandler {
     public NotificationCompat.Builder getDailyNotification(){
 
         return new NotificationCompat.Builder(context.getApplicationContext(), channelDailyID)
-                .setContentTitle("Aggiungi il tuo record")
-                .setContentText("Non trascurarti!")
+                .setContentTitle(context.getResources().getString(R.string.titleDailyNotification))
+                .setContentText(context.getResources().getString(R.string.descriptionDailyNotification))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{0,500,1000})
@@ -132,15 +132,15 @@ public class NotificationHandler {
         @Override
         protected Void doInBackground(Void... voids) {
             if (databaseManager.triggerNotificationPressureThreShold()){
-                NotificationCompat.Builder bd = getInfoNotification("Pressione", "I parametri della tua pressione preoccupanti!");
+                NotificationCompat.Builder bd = getInfoNotification(context.getResources().getString(R.string.titleNotificationPressione), context.getResources().getString(R.string.descriptionNotificationPressione));
                 getNotificationManager().notify(PRESSURE_ID, bd.build());
             }
             if (databaseManager.triggerNotificationTemperatureThreShold()){
-                NotificationCompat.Builder bd = getInfoNotification("Temperatura", "I parametri della tua temperatura preoccupanti!");
+                NotificationCompat.Builder bd = getInfoNotification(context.getResources().getString(R.string.titleNotificationTemperatura), context.getResources().getString(R.string.descriptionNotificationTemperatura));
                 notificationManager.notify(TEMPERATURE_ID, bd.build());
             }
             if (databaseManager.triggerNotificationWeightThreShold()){
-                NotificationCompat.Builder bd = getInfoNotification("Peso", "I parametri del tuo peso sono preoccupanti!");
+                NotificationCompat.Builder bd = getInfoNotification(context.getResources().getString(R.string.titleNotificationPeso), context.getResources().getString(R.string.descriptionNotificationPeso));
                 notificationManager.notify(WEIGHT_ID, bd.build());
             }
             return null;
@@ -178,8 +178,8 @@ public class NotificationHandler {
 
 
                 NotificationCompat.Builder bd = notificationHandler.getDailyNotification();
-                bd.addAction(R.drawable.ic_library_add_black_24dp, "Aggiungi Record", pendingIntent);
-                bd.addAction(R.drawable.ic_add_black_24dp, "Ritarda", delayFiveMinutesPendingIntent);
+                bd.addAction(R.drawable.ic_library_add_black_24dp,  context.getResources().getString(R.string.buttonAddRecordNotification), pendingIntent);
+                bd.addAction(R.drawable.ic_add_black_24dp, context.getResources().getString(R.string.buttonDelayNotification), delayFiveMinutesPendingIntent);
 
                 notificationManager.notify(NotificationHandler.DAILY_ID, bd.build());
 

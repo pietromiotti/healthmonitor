@@ -6,6 +6,10 @@
     <string name="add_record">Hello blank fragment</string>
     <string name="dateformat">"dd/mm/yyyy HH:mm:ss"</string>
     <string name="threshold">"Threshold attuale: "</string>
+
+
+
+
     <string-array name="priorities_entries">
         <item>1</item>
         <item>2</item>
@@ -20,5 +24,25 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+
+
+    <!-- NotificationHandler.java -->
+
+    <string name="buttonDelayNotification">Ritarda di 5 minuti</string>
+    <string name="buttonAddRecordNotification">Aggiungi un record</string>
+
+    <string name="descriptionNotificationPeso">I parametri del tuo peso sono preoccupanti!</string>
+    <string name="descriptionNotificationPressione">I parametri della tua pressione preoccupanti!</string>
+    <string name="descriptionNotificationTemperatura">I parametri della tua temperatura preoccupanti!</string>
+
+    <string name="titleNotificationPeso">Peso</string>
+    <string name="titleNotificationPressione">Pressione</string>
+    <string name="titleNotificationTemperatura">Temperatura</string>
+
+    <string name="titleDailyNotification">Aggiungi il tuo record</string>
+    <string name="descriptionDailyNotification">Non trascurarti!</string>
+
+
 
 </resources>

@@ -140,6 +140,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
          @Override
          public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
             Record oldRecord = recordList.get(position);
+
+
             databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);notifyItemChanged(position);
             Toast.makeText(context.getApplicationContext(), "EDIT RECORD" , Toast.LENGTH_LONG).show();
             notificationHandler.triggerNotificationInfo();

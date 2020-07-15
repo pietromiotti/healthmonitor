@@ -30,10 +30,6 @@ public class DialogRecord extends DialogFragment{
         this.databaseManager = databaseManager;
     }
 
-    public DialogRecord newInstance() {
-        return new DialogRecord();
-
-    }
 
     public interface DialogListener {
         public void dialogAddRecord(Record newRecord);
@@ -76,6 +72,7 @@ public class DialogRecord extends DialogFragment{
                         if(getArguments()!=null){
                             int position = getArguments().getInt("Position");
 
+                            /*Retrieve all data from the dialog */
 
                             Double weight = Double.parseDouble(weightEditText.getEditText().getText().toString());
                             Double temperature = Double.parseDouble(temperatureEditText.getEditText().getText().toString());
