@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.MyRoomDatabase;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.utils.Converters;
+import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.google.android.material.button.MaterialButton;
 
@@ -54,11 +56,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     public void onBindViewHolder(@NonNull RecordAdapter.RecordViewHolder holder, int position) {
         Record record = recordList.get(position);
 
-        holder.textViewMaxPressure.setText(String.valueOf(record.getMax_pressure()));
-        holder.textViewMinPressure.setText(String.valueOf(record.getMin_pressure()));
-        String weight = String.valueOf(record.getWeight());
+        holder.textViewMaxPressure.setText(Converters.parseIntToString(record.getMax_pressure()));
+        holder.textViewMinPressure.setText(Converters.parseIntToString(record.getMin_pressure()));
+        String weight = Converters.parseDoubleToString(record.getWeight());
         holder.textViewWeight.setText(weight);
-        String temperature = String.valueOf(record.getTemperature());
+        String temperature = Converters.parseDoubleToString(record.getTemperature());
         holder.textViewTemperature.setText(temperature);
 
         if (record.getIsSummary()){
@@ -103,6 +105,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             this.context = context;
             dialog.setDialogListener(this);
 
+
+            /*Setting del funzionamento del bottone "Edit", salva i valori del record in args, così da mostrargli a schermo come pre-caricati, si veda la gestione in DialogRecord.Java*/
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,6 +124,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
                     args.putInt("Position", pos);
                     dialog.setArguments(args);
                     dialog.show( ((FragmentActivity) context).getSupportFragmentManager(), "pos");
+                   // means that back key doesn't close the dialog
                     dialog.setCancelable(false);
 
                 }
@@ -140,11 +145,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
          @Override
          public void dialogEditRecord(int position, int min_pressure, int max_pressure, double temperature, double weight, Date date) {
             Record oldRecord = recordList.get(position);
+            /*Controllo se ci sono almeno due parametri inseriti*/
+            if (ErrorHandler.checkIfDialogFieldsAreCorrect(min_pressure, max_pressure, temperature, weight)){
+                databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);
+                notifyItemChanged(position);
+                ErrorHandler.editCompleted(context);
+                notificationHandler.triggerNotificationInfo();
+            }
+            else ErrorHandler.showToLessArgument(context);
 
-
-            databaseManager.updateRecord(oldRecord, min_pressure, max_pressure, temperature, weight, date);notifyItemChanged(position);
-            Toast.makeText(context.getApplicationContext(), "EDIT RECORD" , Toast.LENGTH_LONG).show();
-            notificationHandler.triggerNotificationInfo();
          }
 
          @Override

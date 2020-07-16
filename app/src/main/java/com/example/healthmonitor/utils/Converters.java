@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.room.TypeConverter;
 
+import com.example.healthmonitor.RoomDatabase.DatabaseManager;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,14 +24,27 @@ public class Converters {
     public static  int parseStringToInt(String s){
         Log.i("PREFERENCE", s);
         if (s.matches("")){
-            return -1;
+            return DatabaseManager.DEFAULT_NULL_VALUE;
         }
         else return Integer.parseInt(s);
     }
 
+    public static String parseIntToString(int i){
+        if (i == DatabaseManager.DEFAULT_NULL_VALUE){
+            return "";
+        }
+        else return String.valueOf(i);
+    }
+    public static String parseDoubleToString(double i){
+        if (i == DatabaseManager.DEFAULT_NULL_VALUE){
+            return "";
+        }
+        else return String.valueOf(i);
+    }
+
     public static double parseStringToDouble(String s){
         if (s.matches("")){
-            return -1;
+            return DatabaseManager.DEFAULT_NULL_VALUE;
         }
         else return Double.parseDouble(s);
     }

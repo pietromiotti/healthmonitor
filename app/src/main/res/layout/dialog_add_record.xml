@@ -70,8 +70,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/dialog_weight_val"
                 />
-
         </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
+
 </ScrollView>

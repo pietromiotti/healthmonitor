@@ -21,6 +21,7 @@ import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.MyRoomDatabase;
 import com.example.healthmonitor.RoomDatabase.Record;
+import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
@@ -149,7 +150,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
         super.onSaveInstanceState(outState);
     }
 
-    public void openAddDialog(){
+    private void openAddDialog(){
         DialogRecord dialog = new DialogRecord(this.databaseManager);
         dialog.setDialogListener(this);
         dialog.show(getActivity().getSupportFragmentManager(), "Tag");
@@ -159,8 +160,13 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
 
     @Override
     public void dialogAddRecord(Record r) {
-           this.databaseManager.addRecord(r);
+        if(ErrorHandler.checkIfDialogFieldsAreCorrect(r.getMin_pressure(), r.getMax_pressure(), r.getTemperature(), r.getWeight())){
+            this.databaseManager.addRecord(r);
             notificationHandler.triggerNotificationInfo();
+            ErrorHandler.insertCompleted(getActivity().getApplicationContext());
+        }
+        else ErrorHandler.InsertShowToLessArgument(getActivity().getApplicationContext());
+
     }
 
     @Override

@@ -35,6 +35,9 @@ public class DatabaseManager {
     private final int temperatureType = 3;
     private final int weightType = 4;
 
+
+    public static int DEFAULT_NULL_VALUE = -1;
+
     private class addRecordAsyncTask extends AsyncTask<Record, Void, Void> {
         @Override
         protected Void doInBackground(Record... records) {
@@ -140,10 +143,10 @@ public class DatabaseManager {
     }
 
     public void updateRecord(Record r, int min_pressure, int max_pressure, double temperature, double weight, Date date){
-        if (weight != -1) r.setWeight(weight);
-        if(temperature != -1) r.setTemperature(temperature);
-        if(max_pressure != -1) r.setMax_pressure(max_pressure);
-        if(min_pressure != -1) r.setMin_pressure(min_pressure);
+        if (weight != DEFAULT_NULL_VALUE) r.setWeight(weight);
+        if(temperature != DEFAULT_NULL_VALUE) r.setTemperature(temperature);
+        if(max_pressure != DEFAULT_NULL_VALUE) r.setMax_pressure(max_pressure);
+        if(min_pressure != DEFAULT_NULL_VALUE) r.setMin_pressure(min_pressure);
         if(date != null) r.setDate(date);
         updateRecordAsyncTask updateRecord = new updateRecordAsyncTask();
         updateRecord.execute(r);
@@ -300,25 +303,25 @@ public class DatabaseManager {
                 current = myList.get(i);
                 switch (type) {
                     case minPressureType:
-                        if (current.getMin_pressure() != -1) {
+                        if (current.getMin_pressure() != DEFAULT_NULL_VALUE) {
                             sum = sum + current.getMin_pressure();
                             counter = counter + 1;
                         }
                         break;
                     case maxPressureType:
-                        if (current.getMax_pressure() != -1) {
+                        if (current.getMax_pressure() != DEFAULT_NULL_VALUE) {
                             sum = sum + current.getMax_pressure();
                             counter = counter + 1;
                         }
                         break;
                     case temperatureType:
-                        if (current.getTemperature() != -1) {
+                        if (current.getTemperature() != DEFAULT_NULL_VALUE) {
                             sum = sum + current.getTemperature();
                             counter = counter + 1;
                         }
                         break;
                     case weightType:
-                        if (current.getWeight() != -1) {
+                        if (current.getWeight() != DEFAULT_NULL_VALUE) {
                             sum = sum + current.getWeight();
                             counter = counter + 1;
                         }

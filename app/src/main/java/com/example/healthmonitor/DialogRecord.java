@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -13,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
 import com.example.healthmonitor.ui.CalendarFragment;
+import com.example.healthmonitor.utils.Converters;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,7 +49,9 @@ public class DialogRecord extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.databaseManager = DatabaseManager.getInstanceDBNOContext();
-        Log.i("DB", "DB DIALOG-->" + this.databaseManager.toString());
+
+
+
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_record, null);
@@ -58,10 +63,19 @@ public class DialogRecord extends DialogFragment{
         final TextInputLayout maxpressureEditText = view.findViewById(R.id.dialog_maxPress);
         final TextInputLayout temperatureEditText = view.findViewById(R.id.dialog_temperature);
         final TextInputLayout weightEditText = view.findViewById(R.id.dialog_weight);
+
+
         if (getArguments() != null){
             acceptButton = getArguments().getString("Accept");
             title = getArguments().getString("Title");
             description = getArguments().getString("Description");
+
+            /*Pre-imposta il dialog con i valori del record */
+            weightEditText.getEditText().setText(String.valueOf(getArguments().getDouble("weight")));
+            maxpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("max_pressure")));
+            minpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("min_pressure")));
+            temperatureEditText.getEditText().setText(String.valueOf(getArguments().getDouble("temperature")));
+
         }
         builder.setView(view)
                 .setTitle(title)
@@ -69,25 +83,26 @@ public class DialogRecord extends DialogFragment{
                 .setPositiveButton(acceptButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         if(getArguments()!=null){
                             int position = getArguments().getInt("Position");
 
                             /*Retrieve all data from the dialog */
 
-                            Double weight = Double.parseDouble(weightEditText.getEditText().getText().toString());
-                            Double temperature = Double.parseDouble(temperatureEditText.getEditText().getText().toString());
-                            Integer minpressure = Integer.parseInt(minpressureEditText.getEditText().getText().toString());
-                            Integer maxpressure = Integer.parseInt(maxpressureEditText.getEditText().getText().toString());
+                            Double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
+                            Double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
+                            Integer minpressure = Converters.parseStringToInt(minpressureEditText.getEditText().getText().toString());
+                            Integer maxpressure = Converters.parseStringToInt(maxpressureEditText.getEditText().getText().toString());
 
                             dialogListener.dialogEditRecord(position, minpressure, maxpressure, temperature, weight, null );
 
                         }
                         else {
 
-                            Double weight = Double.parseDouble(weightEditText.getEditText().getText().toString());
-                            Double temperature = Double.parseDouble(temperatureEditText.getEditText().getText().toString());
-                            Integer minpressure = Integer.parseInt(minpressureEditText.getEditText().getText().toString());
-                            Integer maxpressure = Integer.parseInt(maxpressureEditText.getEditText().getText().toString());
+                            Double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
+                            Double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
+                            Integer minpressure = Converters.parseStringToInt(minpressureEditText.getEditText().getText().toString());
+                            Integer maxpressure = Converters.parseStringToInt(maxpressureEditText.getEditText().getText().toString());
 
                             Date today = new Date();
                             if (CalendarFragment.selectedDate == null){
@@ -113,37 +128,3 @@ public class DialogRecord extends DialogFragment{
     }
 
 }
-
-
-//TODO
-
-/*
-if (getArguments() != null){
-            TextInputLayout minpressureInputLayout = (getActivity()).findViewById(R.id.dialog_minPress);
-            TextInputLayout maxpressureInputLayout = (getActivity()).findViewById(R.id.dialog_maxPress);
-            TextInputLayout temperatureInputLayout = (getActivity()).findViewById(R.id.dialog_temperature);
-            TextInputLayout weightInputLayout = (getActivity()).findViewById(R.id.dialog_weight);
-
-            TextInputEditText minpressureEditText = (getActivity()).findViewById(R.id.dialog_minPress_val);
-            TextInputEditText maxpressureEditText = (getActivity()).findViewById(R.id.dialog_maxPress_val);
-            TextInputEditText temperatureEditText = (getActivity()).findViewById(R.id.dialog_temperature_val);
-            TextInputEditText weightEditText = (getActivity()).findViewById(R.id.dialog_weight_val);
-
-
-            Integer min_pressure = getArguments().getInt("min_pressure");
-            Integer max_pressure = getArguments().getInt("max_pressure");
-            Double weight = getArguments().getDouble("weight");
-            Double temperature = getArguments().getDouble("temperature");
-
-            minpressureInputLayout.setHintAnimationEnabled(false);
-            maxpressureInputLayout.setHintAnimationEnabled(false);
-            temperatureInputLayout.setHintAnimationEnabled(false);
-            weightInputLayout.setHintAnimationEnabled(false);
-
-            minpressureEditText.setText(min_pressure.toString());
-            maxpressureEditText.setText(max_pressure.toString());
-            weightEditText.setText(weight.toString());
-            temperatureEditText.setText(temperature.toString());
-
-        }
- */

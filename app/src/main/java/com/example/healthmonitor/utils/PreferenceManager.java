@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
 
 import java.text.DateFormat;
@@ -47,6 +48,7 @@ public class PreferenceManager {
     private static final String WEIGHT_MONITORING_UPPER_BOUND = "WEIGHT_MONITORING_UPPER_BOUND";
     private static final String FIRST_TIME_ACCESS = "FIRST_TIME_ACCESS";
     public static int DEFAULT_MONITOR_VALUE = 3;
+    public static int DEFAULT_PRIORITY = 1;
 
 
 
@@ -191,17 +193,17 @@ public class PreferenceManager {
         this.setDateToPreference(null);
         this.setDateFromPreference(null);
 
-        this.setMinPressureFrom(-1);
-        this.setMinPressureTo(-1);
+        this.setMinPressureFrom(DatabaseManager.DEFAULT_NULL_VALUE);
+        this.setMinPressureTo(DatabaseManager.DEFAULT_NULL_VALUE);
 
-        this.setMaxPressureTo(-1);
-        this.setMaxPressureFrom(-1);
+        this.setMaxPressureTo(DatabaseManager.DEFAULT_NULL_VALUE);
+        this.setMaxPressureFrom(DatabaseManager.DEFAULT_NULL_VALUE);
 
-        this.setWeightFrom(-1);
-        this.setWeightTo(-1);
+        this.setWeightFrom(DatabaseManager.DEFAULT_NULL_VALUE);
+        this.setWeightTo(DatabaseManager.DEFAULT_NULL_VALUE);
 
-        this.setTemperatureFrom(-1);
-        this.setTemperatureTo(-1);
+        this.setTemperatureFrom(DatabaseManager.DEFAULT_NULL_VALUE);
+        this.setTemperatureTo(DatabaseManager.DEFAULT_NULL_VALUE);
     }
 
     public boolean filteringRecord(Record r) throws ParseException {
@@ -210,39 +212,39 @@ public class PreferenceManager {
         ok =    r.getDate().after(getDateFromPreference()) &&
                 r.getDate().before(getDateToPreference());
 
-        if (getMinPressureFrom() != -1){
+        if (getMinPressureFrom() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getMin_pressure() >= getMinPressureFrom();
         }
 
-        if(getMinPressureTo() != -1){
+        if(getMinPressureTo() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok &&  r.getMin_pressure() <= getMinPressureTo();
         }
 
-        if(getMaxPressureFrom() != -1){
+        if(getMaxPressureFrom() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getMax_pressure() >= getMaxPressureFrom();
         }
 
-        if(getMaxPressureTo() != -1){
+        if(getMaxPressureTo() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getMax_pressure() <= getMaxPressureTo();
         }
 
-        if(getTemperatureFrom() != -1){
+        if(getTemperatureFrom() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getMax_pressure() <= getMaxPressureTo();
         }
 
-        if(getTemperatureFrom() != -1){
+        if(getTemperatureFrom() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getTemperature() >= getTemperatureFrom();
         }
 
-        if(getTemperatureTo() != -1){
+        if(getTemperatureTo() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getTemperature() >= getTemperatureTo();
         }
 
-        if(getWeightFrom() != -1){
+        if(getWeightFrom() != DatabaseManager.DEFAULT_NULL_VALUE){
             ok = ok && r.getWeight() >= getWeightFrom();
         }
 
-        if(getWeightTo() != -1) {
+        if(getWeightTo() != DatabaseManager.DEFAULT_NULL_VALUE) {
             ok = ok && r.getWeight() >= getWeightTo();
         }
         return ok;
@@ -281,15 +283,15 @@ public class PreferenceManager {
     }
 
     public int getWeightPriority(){
-        return sharedPreferences.getInt(PRIORITY_WEIGHT, 1);
+        return sharedPreferences.getInt(PRIORITY_WEIGHT, DEFAULT_PRIORITY);
     }
 
     public int getTemperaturePriority(){
-        return sharedPreferences.getInt(PRIORITY_TEMPERATURE, 1);
+        return sharedPreferences.getInt(PRIORITY_TEMPERATURE, DEFAULT_PRIORITY);
     }
 
     public int getPressurePriority(){
-        return sharedPreferences.getInt(PRIORITY_PRESSURE, 1);
+        return sharedPreferences.getInt(PRIORITY_PRESSURE, DEFAULT_PRIORITY);
     }
 
 
