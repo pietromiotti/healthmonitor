@@ -22,11 +22,22 @@ public class Converters {
     }
 
     public static  int parseStringToInt(String s){
-        Log.i("PREFERENCE", s);
         if (s.matches("")){
             return DatabaseManager.DEFAULT_NULL_VALUE;
         }
-        else return Integer.parseInt(s);
+        else {
+            return Integer.parseInt(s);
+        }
+    }
+
+    public static boolean isInt(double f){
+        if (f % 1 == 0) return true;
+        else return false;
+    }
+
+    public static boolean isPositive(double f){
+        if(f>= -1) return true;
+        else return false;
     }
 
     public static String parseIntToString(int i){

@@ -3,6 +3,7 @@ package com.example.healthmonitor;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.CpuUsageInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
 import com.example.healthmonitor.ui.CalendarFragment;
 import com.example.healthmonitor.utils.Converters;
+import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -89,30 +91,54 @@ public class DialogRecord extends DialogFragment{
 
                             /*Retrieve all data from the dialog */
 
-                            Double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
-                            Double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
-                            Integer minpressure = Converters.parseStringToInt(minpressureEditText.getEditText().getText().toString());
-                            Integer maxpressure = Converters.parseStringToInt(maxpressureEditText.getEditText().getText().toString());
+                            double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
+                            double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
+                            double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
+                            double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
-                            dialogListener.dialogEditRecord(position, minpressure, maxpressure, temperature, weight, null );
-
+                            if( Converters.isPositive(weight) &&
+                                Converters.isPositive(temperature) &&
+                                Converters.isPositive(minpressure) &&
+                                Converters.isPositive(maxpressure))
+                            {
+                                if(Converters.isInt(minpressure) && Converters.isInt(maxpressure)){
+                                    dialogListener.dialogEditRecord(position, (int) minpressure, (int) maxpressure, temperature, weight, null );
+                                }
+                                else ErrorHandler.mustBeInteger(getDialog().getContext());
+                            }
+                            else{
+                                ErrorHandler.mustBePositive(getDialog().getContext());
+                            }
                         }
                         else {
 
-                            Double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
-                            Double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
-                            Integer minpressure = Converters.parseStringToInt(minpressureEditText.getEditText().getText().toString());
-                            Integer maxpressure = Converters.parseStringToInt(maxpressureEditText.getEditText().getText().toString());
+                            double weight = Converters.parseStringToDouble(weightEditText.getEditText().getText().toString());
+                            double temperature = Converters.parseStringToDouble(temperatureEditText.getEditText().getText().toString());
+                            double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
+                            double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
-                            Date today = new Date();
-                            if (CalendarFragment.selectedDate == null){
-                                today = Calendar.getInstance().getTime();
+                            if( Converters.isPositive(weight) &&
+                                    Converters.isPositive(temperature) &&
+                                    Converters.isPositive(minpressure) &&
+                                    Converters.isPositive(maxpressure))
+                            {
+                                if(Converters.isInt(minpressure) && Converters.isInt(maxpressure)){
+                                    Date today = new Date();
+                                    if (CalendarFragment.selectedDate == null){
+                                        today = Calendar.getInstance().getTime();
+                                    }
+                                    else {
+                                        today = CalendarFragment.selectedDate.getTime();
+                                    }
+                                    Record record = databaseManager.initRecord((int)minpressure,(int)maxpressure,temperature,weight, today, false);
+                                    dialogListener.dialogAddRecord(record);
+                                }
+                                else ErrorHandler.mustBeInteger(getDialog().getContext());
                             }
-                            else {
-                                today = CalendarFragment.selectedDate.getTime();
+                            else{
+                                ErrorHandler.mustBePositive(getDialog().getContext());
                             }
-                            Record record = databaseManager.initRecord(minpressure,maxpressure,temperature,weight, today, false);
-                            dialogListener.dialogAddRecord(record);
+
                         }
                     }
                 })

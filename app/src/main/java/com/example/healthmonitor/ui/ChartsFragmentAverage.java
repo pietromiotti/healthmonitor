@@ -174,11 +174,15 @@ public class ChartsFragmentAverage extends Fragment {
             switch (type) {
                 case minPressure:
                     currentArrayList = sparseMatrix.get(month);
-                    currentArrayList.add((double) current.getMin_pressure());
+                    if (current.getMin_pressure() != DatabaseManager.DEFAULT_NULL_VALUE){
+                        currentArrayList.add((double) current.getMin_pressure());
+                    }
                     break;
                 case maxPressure:
                     currentArrayList = sparseMatrix.get(month);
-                    currentArrayList.add((double) current.getMax_pressure());
+                    if(current.getMax_pressure() != DatabaseManager.DEFAULT_NULL_VALUE){
+                        currentArrayList.add((double) current.getMax_pressure());
+                    }
                     break;
                 default:
                     break;
@@ -192,10 +196,12 @@ public class ChartsFragmentAverage extends Fragment {
             for(int m= 0; m< currentArrayList.size(); m++){
                 total = total + currentArrayList.get(m);
             }
+            /*check if the list have at least one element */
             if(currentArrayList.size()!= 0){
                 average = (float) total / currentArrayList.size();
             }
             else average = 0;
+
             actual.add(new BarEntry(i, average));
         }
         return actual;

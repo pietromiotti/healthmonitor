@@ -32,4 +32,12 @@ public class ErrorHandler {
     public static void insertCompleted(Context context){
         Toast.makeText(context, "Aggiunta del record avvenuta con successo", Toast.LENGTH_LONG).show();
     }
+
+    public static void mustBeInteger(Context context){
+        Toast.makeText(context, "Errore! \nI valori della pressione devono essere interi!", Toast.LENGTH_LONG).show();
+    }
+
+    public static void mustBePositive(Context context){
+        Toast.makeText(context, "Errore! \nI valori dei parametri non possono essere negativi!", Toast.LENGTH_LONG).show();
+    }
 }

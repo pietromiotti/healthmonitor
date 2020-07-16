@@ -42,16 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChartsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ChartsFragment extends Fragment{
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     OnChartValueSelectedListenerHelper onChartValueSelectedListenerHelper;
     OnChartGestureListenerHelper onChartGestureListenerHelper;
@@ -65,20 +56,9 @@ public class ChartsFragment extends Fragment{
     }
 
 
-    public static ChartsFragment newInstance(String param1, String param2) {
-        ChartsFragment fragment = new ChartsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -87,8 +67,10 @@ public class ChartsFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_charts, container, false);
 
+        /*Initialize Listner to trigger action on the chart */
         onChartGestureListenerHelper = new OnChartGestureListenerHelper();
         onChartValueSelectedListenerHelper = new OnChartValueSelectedListenerHelper(getContext().getApplicationContext());
+
         databaseManager = DatabaseManager.getInstanceDBNOContext();
 
         lineChart = view.findViewById(R.id.linechart);
@@ -98,15 +80,17 @@ public class ChartsFragment extends Fragment{
         lineChart.setOnChartValueSelectedListener(onChartValueSelectedListenerHelper);;
 
 
+        /*Option on the graphic */
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
 
-        ArrayList<Entry> yValue = new ArrayList<>();
-        ArrayList<Entry> minPressure = new ArrayList<>();
+        ArrayList<Entry> maxpressure_yValue = new ArrayList<>();
+        ArrayList<Entry> minPressure_yValue = new ArrayList<>();
 
         long x;
         Record current;
         int max_pressure, min_pressure;
+        /*Iterate all my records */
         for (int i = 0; i < databaseManager.recordList.size(); i++){
             current = databaseManager.recordList.get(i);
             max_pressure = current.getMax_pressure();
@@ -114,41 +98,52 @@ public class ChartsFragment extends Fragment{
             //Conversion Date
             x = Converters.dateToTimestamp(current.getDate());
 
-            yValue.add(new Entry(x,max_pressure));
-            minPressure.add(new Entry(x, min_pressure));
-
+            /*Check if values are "null", they do not have to be considered */
+            if(max_pressure != DatabaseManager.DEFAULT_NULL_VALUE){
+                maxpressure_yValue.add(new Entry(x,max_pressure));
+            }
+            if(min_pressure != DatabaseManager.DEFAULT_NULL_VALUE){
+                minPressure_yValue.add(new Entry(x, min_pressure));
+            }
         }
 
-        LineDataSet set1 = new LineDataSet(yValue, "Pressione Massima");
-        set1.setColor(Color.BLUE);
-        set1.setCircleColor(Color.BLUE);
-        set1.setLineWidth(3f);
-        set1.setCircleRadius(5f);
-        set1.setValueTextSize(10f);
-        set1.setValueTextColor(Color.BLACK);
-        set1.setFillAlpha(110);
-        LineDataSet set2 = new LineDataSet(minPressure, "Pressione Minima");
-        set2.setColor(Color.GREEN);
-        set2.setCircleColor(Color.GREEN);
-        set2.setLineWidth(3f);
-        set2.setCircleRadius(5f);
-        set2.setValueTextSize(10f);
-        set2.setValueTextColor(Color.BLACK);
-        set2.setFillAlpha(110);
+        /*Define LineDataSets with the defined coordinates - Each LineDataSet will be a different line on the Chart*/
+        LineDataSet maxpressure_line = new LineDataSet(maxpressure_yValue, "Pressione Massima");
+        LineDataSet minpressure_line = new LineDataSet(minPressure_yValue , "Pressione Minima");
 
+
+        /*Graphic details of the lines */
+        maxpressure_line.setColor(Color.BLUE);
+        maxpressure_line.setCircleColor(Color.BLUE);
+        maxpressure_line.setLineWidth(3f);
+        maxpressure_line.setCircleRadius(5f);
+        maxpressure_line.setValueTextSize(10f);
+        maxpressure_line.setValueTextColor(Color.BLACK);
+        maxpressure_line.setFillAlpha(110);
+
+
+        minpressure_line.setColor(Color.GREEN);
+        minpressure_line.setCircleColor(Color.GREEN);
+        minpressure_line.setLineWidth(3f);
+        minpressure_line.setCircleRadius(5f);
+        minpressure_line.setValueTextSize(10f);
+        minpressure_line.setValueTextColor(Color.BLACK);
+        minpressure_line.setFillAlpha(110);
+
+        /* This Array contains all the "Lines" to be rendered in the Chart */
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set1);
-        dataSets.add(set2);
+        dataSets.add(maxpressure_line);
+        dataSets.add(minpressure_line);
 
 
+        /* LineData is the final Type to be upload in the chart*/
         LineData data = new LineData(dataSets);
 
         lineChart.setData(data);
         lineChart.getDescription().setEnabled(false);
-        //lineChart.setVisibleXRangeMaximum(3);
-        lineChart.setDragEnabled(true);
 
 
+        /*Option in formatting the XVALUES, since Date format is not accepted and should be converted in string thanks to my personalized formatter "MyAxisFormatter"*/
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new MyAxisFormatter());
         xAxis.setGranularity(1f);
@@ -165,6 +160,7 @@ public class ChartsFragment extends Fragment{
 
     }
 
+    /*Converts float (which is a Date in my case) to string to be rendered in the chart */
     public class MyAxisFormatter extends ValueFormatter implements IAxisValueFormatter {
 
         @Override
@@ -215,12 +211,16 @@ public class ChartsFragment extends Fragment{
         }
     }
 
+
+    /* I implemented a single feature just to show what it could be done*/
     public class OnChartValueSelectedListenerHelper implements OnChartValueSelectedListener {
 
         Context context;
         public OnChartValueSelectedListenerHelper(Context context){
             this.context = context;
         }
+
+        /*If a point is clicked this callback prints in a Toast its coordinates */
         @Override
         public void onValueSelected(Entry e, Highlight h) {
             double pointY = e.getY();
