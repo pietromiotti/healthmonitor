@@ -9,6 +9,11 @@ import android.util.Log;
 
 import com.example.healthmonitor.MainActivity;
 
+
+/* This class resolve the action triggered by the notification:
+* 1) ADD RECORD
+* 2) DELAY THE NOTIFICATION
+* */
 public class AlarmReceiverResolver extends BroadcastReceiver {
     NotificationHandler notificationHandler;
     NotificationManager notificationManager;
@@ -17,6 +22,7 @@ public class AlarmReceiverResolver extends BroadcastReceiver {
         notificationHandler = NotificationHandler.getInstanceOfNotificationHandlerNoContext();
         notificationManager = notificationHandler.getNotificationManager();
         String action = intent.getAction();
+        /*This method handle the notification by an AsyncTask */
         notificationHandler.resolveNotificationDaily(action);
     }
 }

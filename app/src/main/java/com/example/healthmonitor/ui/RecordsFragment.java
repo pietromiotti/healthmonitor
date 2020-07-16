@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,8 @@ import com.example.healthmonitor.RecordAdapter;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.google.android.material.button.MaterialButton;
 
-import java.text.ParseException;
 
-
+/*Fragment che contiene la lista di tutti i miei record */
 public class RecordsFragment extends Fragment {
     private DatabaseManager databaseManager;
 
@@ -35,7 +33,6 @@ public class RecordsFragment extends Fragment {
     public RecordsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,17 +43,13 @@ public class RecordsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
 
+        this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
+        /*Creazione del record Adapter con la lista dei record già filtrata*/
         recordAdapter = new RecordAdapter(getActivity(), databaseManager, databaseManager.filteredList);
         View view =  inflater.inflate(R.layout.fragment_records, container, false);
         return view;
 
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
     }
 
 
@@ -69,7 +62,7 @@ public class RecordsFragment extends Fragment {
         MaterialButton filterButton = getActivity().findViewById(R.id.filterButton);
 
         filterButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_filters, null));
-        /*Create New layout Manager */
+        /*Create New layout Manager - Gestisco la rotazione dello schermo posizionando due record per schermata*/
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);

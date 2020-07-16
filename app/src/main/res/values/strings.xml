@@ -27,6 +27,55 @@
 
 
 
+    <!-- ChartsFragment.java -->
+
+    <string name="minimumPressure_label">Pressione Minima</string>
+    <string name="maximumPressure_label">Pressione Massima</string>
+    <!-- ChartsFragmentAverage.java -->
+    <string-array name="month_value">
+        <item> Gennaio </item>
+        <item> Febbraio </item>
+        <item> Marzo </item>
+        <item> Aprile </item>
+        <item> Maggio </item>
+        <item> Giugno </item>
+        <item> Luglio </item>
+        <item> Agosto </item>
+        <item> Settembre </item>
+        <item> Ottobre </item>
+        <item> Novembre </item>
+        <item> Dicembre </item>
+    </string-array>
+
+    <string name="minimumPressureAverage_label">Pressione Minima - Media</string>
+    <string name="maximumPressureAverage_label">Pressione Massima - Media</string>
+
+
+
+
+
+
+
+
+    <!-- SettingFragment.java -->
+    <string name="datePickerTitle">Ora della notifica giornaliera: </string>
+    <string name="datePickerTitle_second">Scegli l\'ora</string>
+
+
+    <!-- DialogRecord.java -->
+    <string name="buttonDialogDefault">Aggiungi</string>
+    <string name="negativeButtonDialogDefault">Aggiungi</string>
+    <string name="titleDialogDefault">Aggiungi un record</string>
+    <string name="descriptionDialogDefault">Aggiungi un nuovo record e continua a monitorare i tuoi parametri!</string>
+
+
+
+
+    <!-- Record.java -->
+    <string name="formatDate">dd/MM/yyyy HH:mm:ss</string>
+    <string name="mediaGiornalieraText">Media Giornaliera</string>
+
+
     <!-- NotificationHandler.java -->
 
     <string name="buttonDelayNotification">Ritarda di 5 minuti</string>

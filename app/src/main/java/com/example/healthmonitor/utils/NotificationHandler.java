@@ -1,5 +1,6 @@
 package com.example.healthmonitor.utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,10 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.RemoteViews;
+
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -20,12 +18,10 @@ import androidx.core.app.NotificationCompat;
 import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
-import com.example.healthmonitor.ui.CalendarFragment;
-import com.google.android.material.button.MaterialButton;
 
-import java.net.Inet4Address;
 import java.util.Calendar;
-import java.util.Date;
+
+/* Handler che mi permette di gestire le notifiche */
 
 public class NotificationHandler {
     public static NotificationHandler notificationHandler;
@@ -48,17 +44,17 @@ public class NotificationHandler {
 
 
 
-    NotificationManager notificationManager;
-    DatabaseManager databaseManager;
-    PreferenceManager preferenceManager;
+    private NotificationManager notificationManager;
+    private DatabaseManager databaseManager;
+    private PreferenceManager preferenceManager;
 
-
-    Context context;
+    private Context context;
 
     public NotificationHandler(Context context) {
         this.context = context;
         databaseManager = DatabaseManager.getInstanceDBNOContext();
         preferenceManager = PreferenceManager.getPreferenceManagerNoContext();
+        /*creazione del channel se Versione android maggiore di 8 */
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
             createChannels();
         }
@@ -87,6 +83,8 @@ public class NotificationHandler {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannels(){
+        /*Creazione di due channel distinti, uno per le notifiche legate alla priorità, uno per le notifiche giornaliere */
+
         NotificationChannel channelInfo = new NotificationChannel(channelInfoID, channelInfoName, NotificationManager.IMPORTANCE_HIGH);
         channelInfo.enableLights(true);
         channelInfo.enableVibration(true);
@@ -103,6 +101,7 @@ public class NotificationHandler {
 
     }
 
+    /*builder della notifica legata alle priorità*/
     public NotificationCompat.Builder getInfoNotification(String title, String message){
         return new NotificationCompat.Builder(context.getApplicationContext(), channelInfoID)
                 .setContentTitle(title)
@@ -114,8 +113,8 @@ public class NotificationHandler {
                 .setSmallIcon(R.drawable.ic_warning_black_24dp);
     }
 
+    /*builder della notifica giornaliera*/
     public NotificationCompat.Builder getDailyNotification(){
-
         return new NotificationCompat.Builder(context.getApplicationContext(), channelDailyID)
                 .setContentTitle(context.getResources().getString(R.string.titleDailyNotification))
                 .setContentText(context.getResources().getString(R.string.descriptionDailyNotification))
@@ -127,6 +126,11 @@ public class NotificationHandler {
     }
 
 
+
+    /*Async task che controlla in modo asincrono (con le API rilasciate dal DataBase Manager) se i parametri attuali superano i valori
+    di threshold impostati dall'utente.
+    Per i dettagli della funzione triggerNotification*ThreShold si veda nel DataBaseManager.java
+     */
     public class AsyncNotificationInfo extends AsyncTask<Void, Void, Void>{
 
         @Override
@@ -147,6 +151,7 @@ public class NotificationHandler {
         }
     }
 
+    /*Api che esegue asyncTask*/
     public void triggerNotificationInfo(){
         AsyncNotificationInfo asyncNotificationInfo = new AsyncNotificationInfo();
         asyncNotificationInfo.execute();
@@ -154,6 +159,9 @@ public class NotificationHandler {
 
 
 
+    /*Async task che controlla in modo asincrono, quindi non sul MainThread, se nel giorno odierno non sono ancora stati inseriti dei record,
+    In tal caso, crea la notifica le cui azioni (action) verranno gestite dall'AlarmReceiverResolver
+     */
     public class AsyncNotificationDaily extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -193,6 +201,7 @@ public class NotificationHandler {
         asyncNotificationDaily.execute();
     }
 
+    /*Async task che risolve l'azione su notifica con il comportamento opportuno */
     public class AsyncResolveNotificationDaily extends AsyncTask<String, Void, Void> {
 
 

@@ -108,8 +108,8 @@ public class ChartsFragment extends Fragment{
         }
 
         /*Define LineDataSets with the defined coordinates - Each LineDataSet will be a different line on the Chart*/
-        LineDataSet maxpressure_line = new LineDataSet(maxpressure_yValue, "Pressione Massima");
-        LineDataSet minpressure_line = new LineDataSet(minPressure_yValue , "Pressione Minima");
+        LineDataSet maxpressure_line = new LineDataSet(maxpressure_yValue, getResources().getString(R.string.maximumPressure_label));
+        LineDataSet minpressure_line = new LineDataSet(minPressure_yValue , getResources().getString(R.string.minimumPressure_label));
 
 
         /*Graphic details of the lines */

@@ -39,12 +39,16 @@ public class MainActivity extends AppCompatActivity {
         nav = Navigation.findNavController(this, R.id.nav_host_fragment);
         navView = findViewById(R.id.nav_view);
         drawer = findViewById(R.id.drawer_layout);
+        /*Setting della toolbar*/
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         appBarConfiguration = new AppBarConfiguration.Builder(nav.getGraph()).setDrawerLayout(drawer).build();
-        //NavigationUI.setupWithNavController(navView, nav);
+
+        /*Setup navigation View -> Genera l'hamburger button per l'apertura del Drawer*/
         NavigationUI.setupActionBarWithNavController(this, nav, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, nav);
+
+        /*Init dei manager*/
         this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getApplicationContext());
         this.databaseManager = DatabaseManager.getInstanceDb(this);
         this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandler(getApplicationContext());
@@ -52,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /*
+    Questa funzione permette il corretto funzionamento della toolbar, in particolare permette la navigazione all'interno del navigation Menù e gestisce,
+    con la libreria NavigationUI, da sè le animazioni dell'Hamburger Button (Freccia Indietro, Hamburger Button)
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -63,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // databaseManager.Close();
     }
 
     @Override

@@ -2,24 +2,23 @@ package com.example.healthmonitor.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+
 
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.RoomDatabase.Record;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/* Questo Manager fornisce delle API e mi permette di gestire tutte le preference, creando un ulteriore livello di astrazione
+per una più facile e solida gestione delle SharedPreference.
+ */
 public class PreferenceManager {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     public static PreferenceManager preferenceManager;
     public Context context;
-    //DateFormat dateFormat;
     String name;
 
     private static final String DATE_FROM = "DATE_FROM";
@@ -49,6 +48,7 @@ public class PreferenceManager {
     private static final String FIRST_TIME_ACCESS = "FIRST_TIME_ACCESS";
     public static int DEFAULT_MONITOR_VALUE = 3;
     public static int DEFAULT_PRIORITY = 1;
+    public static int DEFAULT_NOTIFICATION_HOUR = 12;
 
 
 
@@ -64,7 +64,6 @@ public class PreferenceManager {
         this.context= context;
         this.name = this.context.getClass().getSimpleName();
         sharedPreferences = this.context.getSharedPreferences(context.getPackageName()+"."+name, Context.MODE_PRIVATE);
-        //this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         editor = this.sharedPreferences.edit();
         if (getFirstTimeAccess()) {
             setFirstTimeAccess();
@@ -206,6 +205,8 @@ public class PreferenceManager {
         this.setTemperatureTo(DatabaseManager.DEFAULT_NULL_VALUE);
     }
 
+
+    /* Verifica che il record r soddisfi tutte le correnti impostazioni */
     public boolean filteringRecord(Record r) throws ParseException {
         boolean ok;
 
@@ -262,9 +263,11 @@ public class PreferenceManager {
         long dateLong = Converters.dateToTimestamp(date);
         editor.putLong(DAILY_NOTIFICATION_HOUR, dateLong).apply();
     }
+
+
     public Date getDailyNotificationHour(){
         Calendar c = Calendar.getInstance();
-        c.set(0,0,0, 12,0);
+        c.set(0,0,0, DEFAULT_NOTIFICATION_HOUR,0);
         return Converters.fromTimestamp(sharedPreferences.getLong(DAILY_NOTIFICATION_HOUR, Converters.dateToTimestamp(c.getTime())));
     }
 

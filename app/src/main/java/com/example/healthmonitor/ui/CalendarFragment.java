@@ -30,14 +30,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CalendarFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CalendarFragment extends Fragment implements DialogRecord.DialogListener {
    private DatabaseManager databaseManager;
    private CalendarView calendarView;
@@ -52,17 +46,6 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
         // Required empty public constructor
     }
 
-    public static CalendarFragment newInstance() {
-        CalendarFragment fragment = new CalendarFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +60,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
         this.databaseManager = DatabaseManager.getInstanceDb(getActivity().getApplicationContext());
         this.preferenceManager = PreferenceManager.getPreferenceManagerWithContext(getActivity().getApplicationContext());
         this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandler(getActivity().getApplicationContext());
-        Log.i("DATE", "CALENDAR -->" + this.preferenceManager.context.toString());
+
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         return view;
     }
@@ -89,6 +72,8 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
         text = view.findViewById(R.id.textView2);
         final MaterialButton viewMySelected = view.findViewById(R.id.checkRecordSelectedDate);
         viewMySelected.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.selected_date_records, null));
+
+        /*Notify when date changed */
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -105,26 +90,17 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
 
     @Override
     public void onResume() {
-
         FloatingActionButton addRecord = getActivity().findViewById(R.id.addRecord);
         addRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //MaterialButton btn = getActivity().findViewById(R.id.changeFragment);
-                //btn.setText("Finokkio");
                 openAddDialog();
             }
         });
         if(selectedDate != null){
             calendarView.setDate(selectedDate.getTimeInMillis(),true, true);
-            selectedDatestring = "Selected date " + selectedDate.get(Calendar.DAY_OF_MONTH) + "/" + (selectedDate.get(Calendar.MONTH)+1) + "/" + selectedDate.get(Calendar.YEAR);
+            selectedDatestring = "Giorno selezionato " + selectedDate.get(Calendar.DAY_OF_MONTH) + "/" + (selectedDate.get(Calendar.MONTH)+1) + "/" + selectedDate.get(Calendar.YEAR);
             text.setText(selectedDatestring);
-            try {
-                Log.i("DATE", "DATE FROM -->" + preferenceManager.getDateFromPreference().toString());
-                Log.i("DATE", "DATE TO -->" + preferenceManager.getDateToPreference().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         }
 
         /* Check if the Fragment was open by the notification, in case open de addDialog */

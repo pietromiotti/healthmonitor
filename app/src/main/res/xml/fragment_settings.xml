@@ -68,7 +68,7 @@
             android:persistent="true"
             android:dialogTitle="Intervallo di tempo (in giorni)"
             android:dialogMessage="Seleziona l'intervallo di tempo del monitoraggio, verrà calcolata la media dei parametri con priorità maggiori di tre in questo intervallo"
-            android:defaultValue="30"
+            android:defaultValue=""
             />
         <Preference
             android:key="intervalTime"

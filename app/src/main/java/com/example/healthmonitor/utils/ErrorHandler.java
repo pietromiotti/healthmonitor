@@ -5,11 +5,12 @@ import android.widget.Toast;
 
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 
-import java.util.ArrayList;
 
+
+/*This class helps me to Handler all the errors that could happen*/
 public class ErrorHandler {
 
-    /* check if there are at leat two arguments*/
+    /* check if there are at leat two parameters in the Add/Edit Dialog form*/
     public static  boolean checkIfDialogFieldsAreCorrect(int min_pressure, int max_pressure, double temperature, double weight){
         /*Check if there are at least two fields */
         int counter = 0;

@@ -10,6 +10,8 @@ import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import java.util.Calendar;
 import java.util.Date;
 
+
+/*Utility class, this contains self-made functions that helps me to handle some conversions and other stuff */
 public class Converters {
     @TypeConverter
     public static Date fromTimestamp(Long value) {
@@ -67,6 +69,9 @@ public class Converters {
     public static double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
         return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
     }
+
+
+    /*Self made version of formatDate */
 
     public static String printDate(Date date){
         Calendar calendar = Calendar.getInstance();

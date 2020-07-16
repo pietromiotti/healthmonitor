@@ -1,11 +1,9 @@
 package com.example.healthmonitor.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.utils.Converters;
@@ -27,16 +24,14 @@ import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+/*Fragment relativo all'inserimento dei filtri */
 public class FilterFragment extends Fragment {
 
     NavigationView navigationView;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private DatePickerDialog.OnDateSetListener datePickerDialogFrom;
     private DatePickerDialog.OnDateSetListener datePickerDialogTo;
     private Calendar dateFromFilterValue;
@@ -70,23 +65,6 @@ public class FilterFragment extends Fragment {
 
     public FilterFragment() {
         // Required empty public constructor
-    }
-
-
-    public static FilterFragment newInstance(String param1, String param2) {
-        FilterFragment fragment = new FilterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
 
@@ -133,6 +111,7 @@ public class FilterFragment extends Fragment {
             }
         });
 
+        /* Listener Dialog "SELECT FILTER" FROM*/
         datePickerDialogFrom = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -160,6 +139,7 @@ public class FilterFragment extends Fragment {
             }
         });
 
+        /* Listener Dialog "SELECT FILTER" TO*/
         datePickerDialogTo = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -170,6 +150,7 @@ public class FilterFragment extends Fragment {
         };
 
 
+        /*APPLY BUTTON, prende tutti i valori, li salva nella SharedPreference grazie al preferenceManager ed effettua l'update della lista filtrata nel database*/
         applyButtonFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,10 +204,8 @@ public class FilterFragment extends Fragment {
 
         cancelButtonFilter.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_records, null));
 
-
         return myview;
     }
-
 
 
     @Override
@@ -254,7 +233,7 @@ public class FilterFragment extends Fragment {
         double currentFilterToWeight = preferenceManager.getWeightTo();
 
 
-        /*Check if values are -1, if filters are -1, do not consider tgem */
+        /*Check if values are -1, if filters are -1 (which is the default value), do not consider them in the rendering, leave empty */
         if (!Converters.areSameDay(currentFilterFromDate, Converters.fromTimestamp(Long.MIN_VALUE))) {
             selectedDataFrom.setText(Converters.printDate(currentFilterFromDate));
         }

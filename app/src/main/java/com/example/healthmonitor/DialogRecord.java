@@ -53,13 +53,12 @@ public class DialogRecord extends DialogFragment{
         this.databaseManager = DatabaseManager.getInstanceDBNOContext();
 
 
-
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_record, null);
-        String acceptButton = "Aggiungi";
-        String title = "Aggiungi un record";
-        String description = "Aggiungi un nuovo record e continua a monitorare i tuoi parametri!";
+        String acceptButton = getResources().getString(R.string.buttonDialogDefault);
+        String title = getResources().getString(R.string.titleDialogDefault);
+        String description = getResources().getString(R.string.descriptionDialogDefault);
 
         final TextInputLayout minpressureEditText = view.findViewById(R.id.dialog_minPress);
         final TextInputLayout maxpressureEditText = view.findViewById(R.id.dialog_maxPress);
@@ -67,6 +66,8 @@ public class DialogRecord extends DialogFragment{
         final TextInputLayout weightEditText = view.findViewById(R.id.dialog_weight);
 
 
+        /*Gli arguments sono diversi da null se e solo se il dialog è chiamato da bottone "Modifica", in queato caso
+        * l'intestazione del dialog cambia ed i valori di default dei campi del form coincidono con i valori del record */
         if (getArguments() != null){
             acceptButton = getArguments().getString("Accept");
             title = getArguments().getString("Title");
@@ -96,6 +97,7 @@ public class DialogRecord extends DialogFragment{
                             double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
                             double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
+                            /*Gestione degli errori in caso di bad input */
                             if(ErrorHandler.arePositive(minpressure, maxpressure, weight, temperature)) {
                                 if(ErrorHandler.areInteger(minpressure, maxpressure)){
                                     dialogListener.dialogEditRecord(position, (int) minpressure, (int) maxpressure, temperature, weight, null );
@@ -113,6 +115,7 @@ public class DialogRecord extends DialogFragment{
                             double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
                             double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
+                            /*Gestione degli errori in caso di bad input */
                             if(ErrorHandler.arePositive(minpressure, maxpressure, weight, temperature))
                             {
                                 if(ErrorHandler.areInteger(minpressure, maxpressure)){
@@ -135,7 +138,7 @@ public class DialogRecord extends DialogFragment{
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.negativeButtonDialogDefault), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

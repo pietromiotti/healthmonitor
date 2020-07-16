@@ -6,21 +6,19 @@ import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
 
-import android.app.DirectAction;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+
 import android.widget.TimePicker;
-import android.widget.Toast;
+
 
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+
 
 import com.example.healthmonitor.R;
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
+/*Setting Fragment */
 public class SettingsFragment extends PreferenceFragmentCompat  {
 
 
@@ -69,11 +68,13 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
+            /*Init the preference manager and the notification handler */
             this.preferenceManager = PreferenceManager.getPreferenceManagerNoContext();
             this.notificationHandler = NotificationHandler.getInstanceOfNotificationHandlerNoContext();
             // Load the preferences from an XML resource
             setPreferencesFromResource(R.xml.fragment_settings, rootKey);
 
+            /* Get all the references from the xml file */
             datePicker = findPreference("dateTimePicker");
             selectedHour = findPreference("datePickerValue");
             dailyNotification = findPreference("daily_notify");
@@ -98,6 +99,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
 
 
+            /*Handling the "Daily Notification" switcher, if on/off*/
             dailyNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -109,7 +111,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     Date date = preferenceManager.getDailyNotificationHour();
                     Calendar c = Calendar.getInstance();
                     c.setTime(date);
-                    Log.i("NOTIFICATION", "ALARM FROM PREFERENCE MANAGER" + Converters.printDate(c.getTime()));
                     if(switched){
                         notificationHandler.startAlarm(c);
                     }
@@ -119,6 +120,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling the Date Picker, which is visible only if the Daily Notification Switcher is ON*/
             datePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(final Preference preference) {
@@ -132,20 +134,22 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                             Calendar newCalendar = Calendar.getInstance();
                             newCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                             newCalendar.set(Calendar.MINUTE, selectedMinute);
-                            Log.i("NOTIFICATION", "TIME" + newCalendar.getTime());
-                            //newCalendar.set(0,0,0,selectedHour,selectedMinute,0);
+
                             notificationHandler.startAlarm(newCalendar);
+                            /*Editing the SharedPreference */
                             preferenceManager.setDailyNotificationHour(newCalendar.getTime());
-                            SettingsFragment.selectedHour.setTitle("Ora della notifica giornaliera: " + Converters.printDateHourAndMinutes(newCalendar.getTime()));
+
+                            SettingsFragment.selectedHour.setTitle(getResources().getString(R.string.datePickerTitle) + Converters.printDateHourAndMinutes(newCalendar.getTime()));
                         }
                     }, hour, minute, true);
-                    mTimePicker.setTitle("Scegli l'ora");
+                    mTimePicker.setTitle(getResources().getString(R.string.datePickerTitle_second));
                     mTimePicker.show();
                     return true;
                 }
             });
 
 
+            /*Handling weight priority List */
             weightPriority.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -157,6 +161,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling tempearture priority List */
             temperaturePriority.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -168,6 +173,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Pressure priority List */
             pressurePriority.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -179,6 +185,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling the Interval Timer */
             intervalTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -187,6 +194,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                         if(Converters.isInt(value)){
                             preferenceManager.setIntervalMonitorTime((int) value);
                             intervalTime.setSummary("Attuale tempo di monitoraggio " + (int) value);
+                            intervalTime.setDefaultValue((int) value);
                         }
                         else ErrorHandler.IntervalTimermustBeInteger(getActivity().getApplicationContext());
                     }
@@ -196,6 +204,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Min Pressure Average Lower Bound */
             minPressureAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -212,6 +221,8 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     return false;
                 }
             });
+
+            /*Handling Min Pressure Average Upper Bound */
             minPressureAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -228,6 +239,8 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     return false;
                 }
             });
+
+            /*Handling Max Pressure Average Lower Bound */
             maxPressureAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -245,6 +258,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Max Pressure Average Upper Bound */
             maxPressureAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -265,6 +279,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Weight Average Lower Bound */
             weightAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -280,6 +295,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Weight Average Upper Bound */
             weightAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -295,6 +311,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Handling Temperature Average Lower Bound */
             temperatureAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -308,6 +325,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     return false;
                 }
             });;
+            /*Handling Temperature Average Upper Bound */
             temperatureAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -322,6 +340,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 }
             });
 
+            /*Alla creazione del fragment, effettua il restore dei parametri del frament preselezionando tutte le preferenze*/
             makeDatePickerVisible();
             makePressureVisibile(DatabaseManager.DEFAULT_NULL_VALUE);
             makeTemperatureVisible(DatabaseManager.DEFAULT_NULL_VALUE);

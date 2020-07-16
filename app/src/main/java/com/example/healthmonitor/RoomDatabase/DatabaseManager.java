@@ -6,9 +6,6 @@ import android.util.Log;
 
 import androidx.room.Room;
 
-import com.example.healthmonitor.MainActivity;
-import com.example.healthmonitor.RecordAdapter;
-import com.example.healthmonitor.ui.RecordsFragment;
 import com.example.healthmonitor.utils.PreferenceManager;
 
 import java.text.ParseException;
@@ -16,12 +13,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
 
-/* Handler od DataBase Request */
+
+/* Handler od DataBase Request, it provides me a full API for the interaction with database, it performs all the requests with AsyncTasks.
+* It retrieve the full list of database in the creation of the app, therefore all the subsequent getter request are performed
+* locally thanks to an ArraylList.
+* EveryTime the status of the database changes (adding, updating or deleting elements), the list is updated automatically with the postExecute function.
+*  */
 public class DatabaseManager {
-    String DB_NAME = "Mydb";
+    private static String DB_NAME = "Mydb";
     public static DatabaseManager MyDatabaseManager;
     public List<Record> recordList;
     public List<Record> filteredList;
@@ -174,6 +175,7 @@ public class DatabaseManager {
         return record;
     }
 
+    /*Get all records with a specific date */
     public List<Record>getRecordsDate(Date selected){
         List<Record> selectedDateRecords = new ArrayList<>();
         boolean sameDay;
@@ -241,6 +243,7 @@ public class DatabaseManager {
     }
 
 
+
     public boolean triggerNotificationPressureThreShold(){
         ArrayList<Record> myArrayList = recordsInIntervalTime();
         if (preferenceManager.pressurePriorityGreaterThanMonitorValue()){
@@ -254,7 +257,6 @@ public class DatabaseManager {
 
             if( (averageMinPressure>= minPressureAverageUpperBound || averageMinPressure< minPressureAverageLowerBound) ||
                     (averageMaxPressure>= maxPressureAverageUpperBound || averageMaxPressure< maxPressureAverageLowerBound)){
-                Log.i("AVERAGE", "PRESSURE BOOLEAN --> TRUE");
                 return true;
             }
         }
@@ -270,7 +272,6 @@ public class DatabaseManager {
             double averageTemperature = getAverage(myArrayList, temperatureType );
 
             if(averageTemperature>= temperatureAverageUpperBound || averageTemperature <= temperatureAverageLowerBound) {
-                Log.i("AVERAGE", "TEMPERATURE BOOLEAN --> TRUE");
                 return true;
             }
         }
@@ -286,7 +287,6 @@ public class DatabaseManager {
             double averageweight = getAverage(myArrayList, weightType);
 
             if(averageweight>= weightAverageUpperBound || averageweight <= weightAverageLowerBound) {
-                Log.i("AVERAGE", "BOOLEAN --> TRUE");
                 return true;
             }
         }
@@ -333,7 +333,6 @@ public class DatabaseManager {
             average = sum / counter;
         }
         else average = 0;
-        Log.i("AVERAGE", "AVERAGE: ->" + average);
         return average;
     }
 
@@ -346,16 +345,4 @@ public class DatabaseManager {
         else return false;
     }
 
-    /*
-    public List<Record> filteredRecords() throws ParseException {
-        List<Record> filtered = new ArrayList<>();
-        for(int i = 0; i < recordList.size(); i++){
-            if (preferenceManager.filteringRecord(recordList.get(i))){
-                filtered.add(recordList.get(i));
-            }
-        }
-        return filtered;
-    }
-
-     */
 }

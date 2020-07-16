@@ -21,6 +21,7 @@ public class Record {
 
     private double weight;
 
+    /*Extra field that helps me with the Record Adapter rendering*/
     private boolean isSummary;
 
     public void setId(int id){

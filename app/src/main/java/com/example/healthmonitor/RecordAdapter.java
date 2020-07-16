@@ -64,12 +64,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         holder.textViewTemperature.setText(temperature);
 
         if (record.getIsSummary()){
-            holder.textViewDate.setText("Media Giornaliera");
+            holder.textViewDate.setText(context.getResources().getString(R.string.mediaGiornalieraText));
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
         }
         else{
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat(context.getResources().getString(R.string.formatDate));
             String strDate= formatter.format(record.getDate());
             holder.textViewDate.setText(strDate);
         }
