@@ -74,10 +74,18 @@ public class DialogRecord extends DialogFragment{
             description = getArguments().getString("Description");
 
             /*Pre-imposta il dialog con i valori del record */
-            weightEditText.getEditText().setText(String.valueOf(getArguments().getDouble("weight")));
-            maxpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("max_pressure")));
-            minpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("min_pressure")));
-            temperatureEditText.getEditText().setText(String.valueOf(getArguments().getDouble("temperature")));
+            if(getArguments().getDouble("weight") != DatabaseManager.DEFAULT_NULL_VALUE){
+                weightEditText.getEditText().setText(String.valueOf(getArguments().getDouble("weight")));
+            }
+            if(getArguments().getInt("max_pressure") != DatabaseManager.DEFAULT_NULL_VALUE){
+                maxpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("max_pressure")));
+            }
+            if(getArguments().getInt("min_pressure") != DatabaseManager.DEFAULT_NULL_VALUE){
+                minpressureEditText.getEditText().setText(String.valueOf(getArguments().getInt("min_pressure")));
+            }
+            if(getArguments().getDouble("temperature") != DatabaseManager.DEFAULT_NULL_VALUE){
+                temperatureEditText.getEditText().setText(String.valueOf(getArguments().getDouble("temperature")));
+            }
 
         }
         builder.setView(view)

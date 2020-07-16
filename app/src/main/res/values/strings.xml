@@ -64,7 +64,7 @@
 
     <!-- DialogRecord.java -->
     <string name="buttonDialogDefault">Aggiungi</string>
-    <string name="negativeButtonDialogDefault">Aggiungi</string>
+    <string name="negativeButtonDialogDefault">Cancella</string>
     <string name="titleDialogDefault">Aggiungi un record</string>
     <string name="descriptionDialogDefault">Aggiungi un nuovo record e continua a monitorare i tuoi parametri!</string>
 
