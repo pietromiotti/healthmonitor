@@ -71,7 +71,7 @@
             android:defaultValue=""
             />
         <Preference
-            android:key="intervalTime"
+            android:key="intervalTimeSecond"
             android:title="Intervallo: "
             android:selectable="false"
             app:isPreferenceVisible="false"/>
