@@ -96,12 +96,8 @@ public class DialogRecord extends DialogFragment{
                             double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
                             double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
-                            if( Converters.isPositive(weight) &&
-                                Converters.isPositive(temperature) &&
-                                Converters.isPositive(minpressure) &&
-                                Converters.isPositive(maxpressure))
-                            {
-                                if(Converters.isInt(minpressure) && Converters.isInt(maxpressure)){
+                            if(ErrorHandler.arePositive(minpressure, maxpressure, weight, temperature)) {
+                                if(ErrorHandler.areInteger(minpressure, maxpressure)){
                                     dialogListener.dialogEditRecord(position, (int) minpressure, (int) maxpressure, temperature, weight, null );
                                 }
                                 else ErrorHandler.mustBeInteger(getDialog().getContext());
@@ -117,12 +113,9 @@ public class DialogRecord extends DialogFragment{
                             double minpressure = Converters.parseStringToDouble(minpressureEditText.getEditText().getText().toString());
                             double maxpressure = Converters.parseStringToDouble(maxpressureEditText.getEditText().getText().toString());
 
-                            if( Converters.isPositive(weight) &&
-                                    Converters.isPositive(temperature) &&
-                                    Converters.isPositive(minpressure) &&
-                                    Converters.isPositive(maxpressure))
+                            if(ErrorHandler.arePositive(minpressure, maxpressure, weight, temperature))
                             {
-                                if(Converters.isInt(minpressure) && Converters.isInt(maxpressure)){
+                                if(ErrorHandler.areInteger(minpressure, maxpressure)){
                                     Date today = new Date();
                                     if (CalendarFragment.selectedDate == null){
                                         today = Calendar.getInstance().getTime();

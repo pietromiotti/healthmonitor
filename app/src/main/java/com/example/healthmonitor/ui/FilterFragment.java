@@ -22,10 +22,12 @@ import com.example.healthmonitor.MainActivity;
 import com.example.healthmonitor.R;
 import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.utils.Converters;
+import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,10 +41,10 @@ public class FilterFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener datePickerDialogTo;
     private Calendar dateFromFilterValue;
     private Calendar dateToFilterValue;
-    private int minPressureFromFilterValue;
-    private int minPressureToFilterValue;
-    private int maxPressureFromFilterValue;
-    private int maxPressureToFilterValue;
+    private double minPressureFromFilterValue;
+    private double minPressureToFilterValue;
+    private double maxPressureFromFilterValue;
+    private double maxPressureToFilterValue;
     private double temperatureFromFilterValue;
     private double temperatureToFilterValue;
     private double weightFromFilterValue;
@@ -172,10 +174,10 @@ public class FilterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                minPressureFromFilterValue = Converters.parseStringToInt(selectedMinPressureFrom.getText().toString());
-                minPressureToFilterValue = Converters.parseStringToInt(selectedMinPressureTo.getText().toString());
-                maxPressureFromFilterValue = Converters.parseStringToInt(selectedMaxPressureFrom.getText().toString());
-                maxPressureToFilterValue = Converters.parseStringToInt(selectedMaxPressureTo.getText().toString());
+                minPressureFromFilterValue = Converters.parseStringToDouble(selectedMinPressureFrom.getText().toString());
+                minPressureToFilterValue = Converters.parseStringToDouble(selectedMinPressureTo.getText().toString());
+                maxPressureFromFilterValue = Converters.parseStringToDouble(selectedMaxPressureFrom.getText().toString());
+                maxPressureToFilterValue = Converters.parseStringToDouble(selectedMaxPressureTo.getText().toString());
                 temperatureFromFilterValue = Converters.parseStringToDouble(selectedTemperatureFrom.getText().toString());
                 temperatureToFilterValue = Converters.parseStringToDouble(selectedTemperatureTo.getText().toString());
                 weightFromFilterValue = Converters.parseStringToDouble(selectedWeightFrom.getText().toString());
@@ -187,16 +189,23 @@ public class FilterFragment extends Fragment {
                 if (dateToFilterValue != null) {
                     preferenceManager.setDateToPreference(dateToFilterValue.getTime());
                 }
-                preferenceManager.setMinPressureFrom(minPressureFromFilterValue);
-                preferenceManager.setMinPressureTo(minPressureToFilterValue);
-                preferenceManager.setMaxPressureFrom(maxPressureFromFilterValue);
-                preferenceManager.setMaxPressureTo(maxPressureToFilterValue);
-                preferenceManager.setTemperatureFrom(temperatureFromFilterValue);
-                preferenceManager.setTemperatureTo(temperatureToFilterValue);
-                preferenceManager.setWeightFrom(weightFromFilterValue);
-                preferenceManager.setWeightTo(weightToFilterValue);
+                if(ErrorHandler.arePositiveArray(minPressureFromFilterValue, minPressureToFilterValue, maxPressureFromFilterValue, maxPressureToFilterValue, temperatureFromFilterValue, temperatureToFilterValue, weightFromFilterValue, weightToFilterValue)){
+                    if(ErrorHandler.areIntegerArray(minPressureFromFilterValue, minPressureToFilterValue, maxPressureFromFilterValue, maxPressureToFilterValue)){
+                        preferenceManager.setMinPressureFrom((int)minPressureFromFilterValue);
+                        preferenceManager.setMinPressureTo((int)minPressureToFilterValue);
+                        preferenceManager.setMaxPressureFrom((int)maxPressureFromFilterValue);
+                        preferenceManager.setMaxPressureTo((int)maxPressureToFilterValue);
+                        preferenceManager.setTemperatureFrom(temperatureFromFilterValue);
+                        preferenceManager.setTemperatureTo(temperatureToFilterValue);
+                        preferenceManager.setWeightFrom(weightFromFilterValue);
+                        preferenceManager.setWeightTo(weightToFilterValue);
+                        databaseManager.updateFilterList();
+                    }
+                    else ErrorHandler.mustBeInteger(getActivity().getApplicationContext());
 
-                databaseManager.updateFilterList();
+                }
+                else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
+
                 getActivity().onBackPressed();
             }
         });
