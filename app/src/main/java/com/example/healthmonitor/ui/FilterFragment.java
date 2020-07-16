@@ -227,6 +227,8 @@ public class FilterFragment extends Fragment {
         return myview;
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -252,34 +254,35 @@ public class FilterFragment extends Fragment {
         double currentFilterToWeight = preferenceManager.getWeightTo();
 
 
+        /*Check if values are -1, if filters are -1, do not consider tgem */
         if (!Converters.areSameDay(currentFilterFromDate, Converters.fromTimestamp(Long.MIN_VALUE))) {
             selectedDataFrom.setText(Converters.printDate(currentFilterFromDate));
         }
         if (!Converters.areSameDay(currentFilterToDate, Converters.fromTimestamp(Long.MAX_VALUE))) {
             selectedDataTo.setText(Converters.printDate(currentFilterToDate));
         }
-        if (currentFilterFromMinPressure !=  -1) {
+        if (currentFilterFromMinPressure !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedMinPressureFrom.setText(String.valueOf(preferenceManager.getMinPressureFrom()));
         }
-        if (currentFilterToMinPressure !=  -1) {
+        if (currentFilterToMinPressure !=   DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedMinPressureTo.setText(String.valueOf(preferenceManager.getMinPressureTo()));
         }
-        if (currentFilterFromMaxPressure != -1) {
+        if (currentFilterFromMaxPressure !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedMaxPressureFrom.setText(String.valueOf(preferenceManager.getMaxPressureFrom()));
         }
-        if (currentFilterToMaxPressure != -1) {
+        if (currentFilterToMaxPressure !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedMaxPressureTo.setText(String.valueOf(preferenceManager.getMaxPressureTo()));
         }
-        if (currentFilterFromTemperature != -1) {
+        if (currentFilterFromTemperature !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedTemperatureFrom.setText(String.valueOf(preferenceManager.getTemperatureFrom()));
         }
-        if (currentFilterToTemperature != -1) {
+        if (currentFilterToTemperature !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedTemperatureTo.setText(String.valueOf(preferenceManager.getTemperatureTo()));
         }
-        if (currentFilterFromWeight != -1) {
+        if (currentFilterFromWeight !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedWeightFrom.setText(String.valueOf(preferenceManager.getWeightFrom()));
         }
-        if (currentFilterToWeight != -1) {
+        if (currentFilterToWeight !=  DatabaseManager.DEFAULT_NULL_VALUE) {
             selectedWeightTo.setText(String.valueOf(preferenceManager.getWeightTo()));
         }
     }

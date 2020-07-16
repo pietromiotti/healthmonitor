@@ -1,8 +1,12 @@
 package com.example.healthmonitor.ui;
 
+import com.example.healthmonitor.RoomDatabase.DatabaseManager;
 import com.example.healthmonitor.utils.Converters;
+import com.example.healthmonitor.utils.ErrorHandler;
 import com.example.healthmonitor.utils.NotificationHandler;
 import com.example.healthmonitor.utils.PreferenceManager;
+
+import android.app.DirectAction;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -178,9 +182,15 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             intervalTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(newValue.toString());
-                    preferenceManager.setIntervalMonitorTime(value);
-                    intervalTime.setSummary("Attuale tempo di monitoraggio " + value);
+                    double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        if(Converters.isInt(value)){
+                            preferenceManager.setIntervalMonitorTime((int) value);
+                            intervalTime.setSummary("Attuale tempo di monitoraggio " + (int) value);
+                        }
+                        else ErrorHandler.IntervalTimermustBeInteger(getActivity().getApplicationContext());
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
                     return false;
                 }
@@ -189,9 +199,15 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             minPressureAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(newValue.toString());
-                    preferenceManager.setMinPressureAverageLowerBound(value);
-                    minPressureAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        if(Converters.isInt(value)){
+                            preferenceManager.setMinPressureAverageLowerBound((int)value);
+                            minPressureAverageLowerBound.setSummary("Threshold attuale: " + (int) value);
+                        }
+                        else ErrorHandler.mustBeInteger(getActivity().getApplicationContext());
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
                     return false;
                 }
@@ -199,10 +215,15 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             minPressureAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(newValue.toString());
-
-                    preferenceManager.setMinPressureAverageUpperBound(value);
-                    minPressureAverageUpperBound.setSummary("Threshold attuale: " + value);
+                    double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        if(Converters.isInt(value)){
+                            preferenceManager.setMinPressureAverageUpperBound((int)value);
+                            minPressureAverageUpperBound.setSummary("Threshold attuale: " + (int)value);
+                        }
+                        else ErrorHandler.mustBeInteger(getActivity().getApplicationContext());
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
                     return false;
                 }
@@ -210,10 +231,16 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             maxPressureAverageLowerBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(newValue.toString());
-                    preferenceManager.setMaxPressureAverageLowerBound(value);
-                    maxPressureAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        if(Converters.isInt(value)){
+                            preferenceManager.setMaxPressureAverageLowerBound((int)value);
+                            maxPressureAverageLowerBound.setSummary("Threshold attuale: " + (int)value);
 
+                        }
+                        else ErrorHandler.mustBeInteger(getActivity().getApplicationContext());
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
                     return false;
                 }
             });
@@ -221,9 +248,18 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             maxPressureAverageUpperBound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(newValue.toString());
-                    preferenceManager.setMaxPressureAverageUpperBound(value);
-                    maxPressureAverageUpperBound.setSummary("Threshold attuale: " + value);
+
+                    double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        if(Converters.isInt(value)){
+                            preferenceManager.setMaxPressureAverageUpperBound((int)value);
+                            maxPressureAverageUpperBound.setSummary("Threshold attuale: " +(int) value);
+
+                        }
+                        else ErrorHandler.mustBeInteger(getActivity().getApplicationContext());
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
+
 
                     return false;
                 }
@@ -233,8 +269,12 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-                    preferenceManager.setWeightAverageLowerBound(value);
-                    weightAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        preferenceManager.setWeightAverageLowerBound(value);
+                        weightAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
+
 
                     return false;
                 }
@@ -244,8 +284,12 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-                    preferenceManager.setWeightAverageUpperBound(value);
-                    weightAverageUpperBound.setSummary("Threshold attuale: " + value);
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        preferenceManager.setWeightAverageUpperBound(value);
+                        weightAverageUpperBound.setSummary("Threshold attuale: " + value);
+
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
                     return false;
                 }
@@ -255,8 +299,11 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
-                    preferenceManager.setTemperatureAverageLowerBound(value);
-                    temperatureAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        preferenceManager.setTemperatureAverageLowerBound(value);
+                        temperatureAverageLowerBound.setSummary("Threshold attuale: " + value);
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
                     return false;
                 }
@@ -265,17 +312,20 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     double value = Double.parseDouble(newValue.toString());
+                    if(Converters.isPositive(value) && value!=DatabaseManager.DEFAULT_NULL_VALUE){
+                        preferenceManager.setTemperatureAverageUpperBound(value);
+                        temperatureAverageUpperBound.setSummary("Threshold attuale: " + value);
+                    }
+                    else ErrorHandler.mustBePositive(getActivity().getApplicationContext());
 
-                    preferenceManager.setTemperatureAverageUpperBound(value);
-                    temperatureAverageUpperBound.setSummary("Threshold attuale: " + value);
                     return false;
                 }
             });
 
             makeDatePickerVisible();
-            makePressureVisibile(-1);
-            makeTemperatureVisible(-1);
-            makeWeightVisibile(-1);
+            makePressureVisibile(DatabaseManager.DEFAULT_NULL_VALUE);
+            makeTemperatureVisible(DatabaseManager.DEFAULT_NULL_VALUE);
+            makeWeightVisibile(DatabaseManager.DEFAULT_NULL_VALUE);
             intervalTime.setSummary("Attuale tempo di monitoraggio " + preferenceManager.getIntervalMonitorTime());
 
         }
@@ -299,7 +349,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
 
 
     private void makePressureVisibile(int value){
-        if(value==-1) value = preferenceManager.getPressurePriority();
+        if(value==DatabaseManager.DEFAULT_NULL_VALUE) value = preferenceManager.getPressurePriority();
         pressurePriority.setValue(String.valueOf(value));
         if(value >= PRIORITY_MONITOR_VALUE){
             int maxLowerBound = preferenceManager.getMaxPressureAverageLowerBound();
@@ -324,7 +374,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
     }
 
     private void makeWeightVisibile(int value){
-        if(value==-1) value = preferenceManager.getWeightPriority();
+        if(value==DatabaseManager.DEFAULT_NULL_VALUE) value = preferenceManager.getWeightPriority();
         weightPriority.setValue(String.valueOf(value));
         if(value >= PRIORITY_MONITOR_VALUE){
             double weightLowerBound = preferenceManager.getWeightAverageLowerBound();
@@ -341,7 +391,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
     }
 
     private void makeTemperatureVisible(int value){
-        if (value==-1) value = preferenceManager.getTemperaturePriority();
+        if (value==DatabaseManager.DEFAULT_NULL_VALUE) value = preferenceManager.getTemperaturePriority();
         temperaturePriority.setValue(String.valueOf(value));
 
         if(value >= PRIORITY_MONITOR_VALUE){
