@@ -19,6 +19,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
             android:id="@+id/dialog_minPress_val"
             />
 
@@ -36,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dialog_maxPress_val"
+            android:inputType="number"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
