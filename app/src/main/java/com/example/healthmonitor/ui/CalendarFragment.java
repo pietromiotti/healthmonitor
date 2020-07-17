@@ -82,7 +82,7 @@ public class CalendarFragment extends Fragment implements DialogRecord.DialogLis
                 int minutes = rightNow.get(Calendar.MINUTE);
                 selectedDate = Calendar.getInstance();
                 selectedDate.set(year,month,dayOfMonth,hour,minutes);
-                selectedDatestring = "Selected date " + dayOfMonth + "/" + (month+1) + "/" + year;
+                selectedDatestring = "Giorno selezionato " + dayOfMonth + "/" + (month+1) + "/" + year;
                 text.setText(selectedDatestring);
             }
         });
