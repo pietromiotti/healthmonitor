@@ -211,8 +211,11 @@ public class NotificationHandler {
             if(NotificationHandler.ADD_ACTION.equals(action)){
                 Intent reperatingIntent = new Intent(context, MainActivity.class);
                 reperatingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                /*This extra is a helper that helps me to distinguish when the main activity is triggered by the notification, for the details check on MainActivity.java*/
+                /*This extra is a helper that helps me to distinguish when the main activity is triggered by the notification,
+                for the details check on MainActivity.java*/
                 reperatingIntent.putExtra("NotificationMessage", true);
+
+
                 context.startActivity(reperatingIntent);
                 notificationManager.cancel(NotificationHandler.DAILY_ID);
             }
