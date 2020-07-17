@@ -70,6 +70,7 @@
             android:dialogMessage="Seleziona l'intervallo di tempo del monitoraggio, verrà calcolata la media dei parametri con priorità maggiori di tre in questo intervallo"
             android:defaultValue=""
             android:inputType="number"
+            android:digits="0123456789"
             />
         <Preference
             android:key="intervalTimeSecond"
@@ -91,6 +92,7 @@
             android:dialogMessage="Seleziona il valore di tolleranza minimo"
             android:defaultValue=""
             android:inputType="number"
+            android:digits="0123456789"
             />
         <EditTextPreference
             android:key="minPressureAverageUpperBound"
@@ -100,6 +102,7 @@
             android:dialogMessage="Seleziona il valore di tolleranza massimo"
             android:defaultValue=""
             android:inputType="number"
+            android:digits="0123456789"
             />
         <EditTextPreference
             android:key="maxPressureAverageLowerBound"
@@ -109,6 +112,7 @@
             android:dialogMessage="Seleziona il valore di tolleranza minimo"
             android:defaultValue=""
             android:inputType="number"
+            android:digits="0123456789"
             />
         <EditTextPreference
             android:key="maxPressureAverageUpperBound"

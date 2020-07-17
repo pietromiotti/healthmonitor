@@ -8,12 +8,16 @@ import com.example.healthmonitor.utils.PreferenceManager;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -42,15 +46,15 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
     private ListPreference temperaturePriority;
     private ListPreference pressurePriority;
 
-    private Preference intervalTime;
-    private Preference minPressureAverageLowerBound;
-    private Preference minPressureAverageUpperBound;
-    private Preference maxPressureAverageLowerBound;
-    private Preference maxPressureAverageUpperBound;
-    private Preference weightAverageLowerBound;
-    private Preference weightAverageUpperBound;
-    private Preference temperatureAverageLowerBound;
-    private Preference temperatureAverageUpperBound;
+    private EditTextPreference  intervalTime;
+    private EditTextPreference  minPressureAverageLowerBound;
+    private EditTextPreference  minPressureAverageUpperBound;
+    private EditTextPreference  maxPressureAverageLowerBound;
+    private EditTextPreference  maxPressureAverageUpperBound;
+    private EditTextPreference  weightAverageLowerBound;
+    private EditTextPreference  weightAverageUpperBound;
+    private EditTextPreference  temperatureAverageLowerBound;
+    private EditTextPreference  temperatureAverageUpperBound;
 
     private PreferenceCategory pressureCategory;
     private PreferenceCategory weightCategory;
@@ -84,7 +88,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             pressurePriority = findPreference("pressurePriority");
 
             intervalTime = findPreference("intervalTime");
-            minPressureAverageLowerBound = findPreference("minPressureAverageLowerBound");
+            minPressureAverageLowerBound =  findPreference("minPressureAverageLowerBound");
             minPressureAverageUpperBound = findPreference("minPressureAverageUpperBound");
             maxPressureAverageLowerBound = findPreference("maxPressureAverageLowerBound");
             maxPressureAverageUpperBound = findPreference("maxPressureAverageUpperBound");
@@ -92,6 +96,70 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
             weightAverageUpperBound = findPreference("weightAverageUpperBound");
             temperatureAverageLowerBound = findPreference("temperatureAverageLowerBound");
             temperatureAverageUpperBound = findPreference("temperatureAverageUpperBound");
+
+
+            minPressureAverageLowerBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
+            minPressureAverageUpperBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
+
+            maxPressureAverageLowerBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
+
+            maxPressureAverageUpperBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
+
+            temperatureAverageUpperBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                }
+            });
+
+            temperatureAverageLowerBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                }
+            });
+
+            weightAverageUpperBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                }
+            });
+
+            weightAverageLowerBound.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                }
+            });
+
+            intervalTime.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
+
 
             pressureCategory = findPreference("pressureCategory");
             weightCategory = findPreference("weightCategory");
@@ -156,7 +224,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     int value = Integer.parseInt(newValue.toString());
                     preferenceManager.setWeightPriority(value);
                     makeWeightVisibile(value);
-                    if(value>= PRIORITY_MONITOR_VALUE) notificationHandler.triggerNotificationInfo();
                     return false;
                 }
             });
@@ -168,7 +235,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     int value = Integer.parseInt(newValue.toString());
                     preferenceManager.setTemperaturePriority(value);
                     makeTemperatureVisible(value);
-                    if(value>= PRIORITY_MONITOR_VALUE) notificationHandler.triggerNotificationInfo();
                     return false;
                 }
             });
@@ -180,7 +246,6 @@ public class SettingsFragment extends PreferenceFragmentCompat  {
                     int value = Integer.parseInt(newValue.toString());
                     preferenceManager.setPressurePriority(value);
                     makePressureVisibile(value);
-                    if(value>= PRIORITY_MONITOR_VALUE) notificationHandler.triggerNotificationInfo();
                     return false;
                 }
             });
